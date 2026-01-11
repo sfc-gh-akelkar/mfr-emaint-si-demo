@@ -14,6 +14,7 @@
 2. **Demonstrate AI-powered insights** - Natural language questions → actionable answers
 3. **Highlight the Hendrix Lighthouse story** - New facility outperforming legacy plants
 4. **Surface tribal knowledge** - Cortex Search finds technician notes
+5. **Build trust** - AI acknowledges data boundaries, no hallucinations
 
 ---
 
@@ -161,6 +162,40 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
+### **10. 🛡️ TRUST TEST - No Hallucinations**
+
+Use these questions to demonstrate the AI doesn't make up data:
+
+#### **Option A: Non-existent Plant**
+**Ask**: "What's the maintenance cost for Plant C?"
+
+| What to Look For | ✅ Good Answer Includes |
+|------------------|------------------------|
+| Acknowledges gap | "Plant C does not exist in our system" |
+| Lists valid options | Plant A, Plant B, Hendrix |
+| No fake data | Does NOT invent costs for Plant C |
+| Helpful redirect | Offers to show real plant data |
+
+#### **Option B: Wrong Equipment Type**
+**Ask**: "How are our CNC machines performing?"
+
+| What to Look For | ✅ Good Answer Includes |
+|------------------|------------------------|
+| Acknowledges gap | "We don't have CNC machines in this system" |
+| Explains scope | Lists actual equipment (Sterilizers, Washers, etc.) |
+| Domain awareness | "This tracks medical equipment, not manufacturing" |
+| No fake data | Does NOT invent CNC performance metrics |
+
+**🎯 Key Demo Moment**:
+> "I just asked about something that doesn't exist in our data. The AI didn't make up numbers - it told me the truth and offered to help with what it actually knows. This is trustworthy AI that knows its boundaries."
+
+**Why This Matters**:
+- Builds confidence that insights are grounded in real data
+- Shows the AI won't lead users astray with fabricated information
+- Critical for decision-making trust
+
+---
+
 ## 🎬 Demo Flow (Recommended Order)
 
 ```
@@ -178,7 +213,9 @@ USE ROLE SF_INTELLIGENCE_DEMO;
      ↓
 7. ⭐ Hero Question (Cortex Search moment)
      ↓
-8. Wrap-up
+8. 🛡️ Trust Test (optional - "Plant C" or "CNC machines")
+     ↓
+9. Wrap-up
 ```
 
 ---
