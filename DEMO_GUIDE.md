@@ -115,26 +115,12 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 **Talking Point**: "Pattern recognition across all your work orders - instantly see which assets need attention."
 
-**🔗 Transition to Q6**: *Bridge from failure frequency to repair time:*
-> "18 hours of downtime on one machine is significant. When something does go down, how fast are we recovering? Let's look at repair times..."
+**🔗 Transition to Q6**: *Bridge from failures to maintenance strategy:*
+> "We're seeing a lot of reactive repairs. Are we spending more time fixing or preventing?"
 
 ---
 
-### **6. MTTR Analysis**
-**Ask**: "How long does it take us to get a line back up?"
-
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Average MTTR | ~3.5 hours organization-wide |
-| Plant comparison | Hendrix 2.5x faster than legacy |
-| Equipment breakdown | By asset type |
-| Best/worst performers | Specific assets named |
-
-**Talking Point**: "Hendrix repairs equipment 2.5x faster - that's the Lighthouse advantage in hard numbers."
-
----
-
-### **7. Maintenance Strategy**
+### **6. Maintenance Strategy**
 **Ask**: "Are we spending more time fixing broken machines or preventing breaks?"
 
 | What to Look For | ✅ Good Answer Includes |
@@ -149,7 +135,7 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
-### **8. Asset Value Analysis**
+### **7. Asset Value Analysis**
 **Ask**: "Which assets are costing us the most to maintain relative to their value?"
 
 | What to Look For | ✅ Good Answer Includes |
@@ -163,7 +149,7 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
-### **9. ⭐ HERO QUESTION - Tribal Knowledge**
+### **8. ⭐ HERO QUESTION - Tribal Knowledge**
 **Ask**: "The Novus 600 is wobbling, how was this specific problem solved the last time it happened?"
 
 | What to Look For | ✅ Good Answer Includes |
@@ -179,7 +165,7 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
-### **10. 🛡️ TRUST TEST - No Hallucinations**
+### **9. 🛡️ TRUST TEST - No Hallucinations**
 
 Use these questions to demonstrate the AI doesn't make up data:
 
@@ -218,13 +204,13 @@ Use these questions to demonstrate the AI doesn't make up data:
 ```
 1. Cost Analysis (warm-up)
      ↓
-2. Benchmarking (set up Hendrix story)
+2. Benchmarking (set up Hendrix story - includes MTTR comparison)
      ↓
-3. OEE Performance (production visibility)
+3. OEE Performance (surface the problem machine)
      ↓
-4. Root Cause - Novus 600 (introduce the problem)
+4. History & Permanent Fix (tribal knowledge)
      ↓
-5. MTTR Analysis (Hendrix advantage)
+5. Failure Analysis (fleet-wide patterns)
      ↓
 6. Maintenance Strategy (opportunity sizing)
      ↓
