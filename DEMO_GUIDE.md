@@ -115,6 +115,9 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 **Talking Point**: "Pattern recognition across all your work orders - instantly see which assets need attention."
 
+**🔗 Transition to Q6**: *Bridge from failure frequency to repair time:*
+> "18 hours of downtime on one machine is significant. When something does go down, how fast are we recovering? Let's look at repair times..."
+
 ---
 
 ### **6. MTTR Analysis**
