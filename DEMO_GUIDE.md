@@ -85,19 +85,21 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
-### **4. The Fix (Actionable Detail)**
-**Ask**: "How do I fix the pneumatic actuator bracket on the Novus 600?"
+### **4. History & Permanent Fix (Tribal Knowledge)**
+**Ask**: "Has this wobbling issue happened before? What's the permanent fix?"
 
-*Alternative phrasing*: "What's the repair procedure for the wobbling issue?"
+*Alternative phrasing*: "What's the history of the Novus 600 bracket problem?"
 
 | What to Look For | ✅ Good Answer Includes |
 |------------------|------------------------|
-| Specific torque spec | 45 ft-lbs |
-| Thread locker | Mentioned as prevention |
-| Warning | "Bearings are NOT the problem" |
-| Permanent fix | Replace bracket plate at next downtime |
+| History | Previous occurrences documented |
+| Pattern | Recurring issue identified |
+| Permanent solution | Replace bracket plate entirely |
+| Technician notes | Referenced as source |
 
-**Talking Point**: "We went from 'which machine is slow' to 'grab a torque wrench and fix it' in two questions. That's actionable intelligence."
+**Talking Point**: "The AI just pulled from technician notes to show this is a *recurring* issue - and gave us the permanent fix, not just a band-aid."
+
+**🔗 Why This Works**: Q3 gave the immediate fix. Q4 adds the history and permanent solution - showing tribal knowledge capture.
 
 ---
 
