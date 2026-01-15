@@ -85,7 +85,7 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
-### **4. History & Permanent Fix (Tribal Knowledge)**
+### **4. ⭐ History & Permanent Fix (HERO QUESTION - Tribal Knowledge)**
 **Ask**: "Has this wobbling issue happened before? What's the permanent fix?"
 
 *Alternative phrasing*: "What's the history of the Novus 600 bracket problem?"
@@ -93,13 +93,15 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 | What to Look For | ✅ Good Answer Includes |
 |------------------|------------------------|
 | History | Previous occurrences documented |
-| Pattern | Recurring issue identified |
+| Pattern | Recurring issue identified (every 6-8 weeks) |
 | Permanent solution | Replace bracket plate entirely |
-| Technician notes | Referenced as source |
+| Technician notes | Quoted directly ("check bracket FIRST") |
+| Warning | "Do NOT replace bearings" |
 
-**Talking Point**: "The AI just pulled from technician notes to show this is a *recurring* issue - and gave us the permanent fix, not just a band-aid."
+**🎯 Key Demo Moment**:
+> "The AI searched your technician notes and found this is a *recurring* issue - every 6-8 weeks. It gave us the permanent fix AND warned us not to waste time on bearings. That's tribal knowledge made searchable."
 
-**🔗 Why This Works**: Q3 gave the immediate fix. Q4 adds the history and permanent solution - showing tribal knowledge capture.
+**🔗 Why This Works**: Q3 gave the immediate fix. Q4 adds the history and permanent solution - this is the Cortex Search magic moment.
 
 ---
 
@@ -145,27 +147,11 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 | Health scores | Poor scores for age highlighted |
 | Contrast | Best performers (Hendrix $75-113) vs worst ($1,500+) |
 
-**Talking Point**: "A 1.5-year-old Novus 600 costing $1,800 in maintenance is a red flag. Hendrix assets of similar age cost $75-113."
+**Talking Point**: "A 1.5-year-old Novus 600 costing $1,200/year while a 6-year-old costs $36/year? That's a red flag the AI surfaced instantly."
 
 ---
 
-### **8. ⭐ HERO QUESTION - Tribal Knowledge**
-**Ask**: "The Novus 600 is wobbling, how was this specific problem solved the last time it happened?"
-
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Exact fix | Torque bracket bolts to 45 ft-lbs |
-| Thread locker | Mentioned as prevention |
-| Warning | "Do NOT replace bearings" |
-| Future recommendation | Replace bracket plate at next downtime |
-| Source | Technician notes referenced |
-
-**🎯 Key Demo Moment**:
-> "This is the magic. A technician could take this answer, grab a torque wrench, and fix the machine right now. No hunting through manuals, no calling the one guy who knows. The AI searched your technician notes and found the exact fix - including the warning that bearings are a red herring."
-
----
-
-### **9. 🛡️ TRUST TEST - No Hallucinations**
+### **8. 🛡️ TRUST TEST - No Hallucinations**
 
 Use these questions to demonstrate the AI doesn't make up data:
 
@@ -204,17 +190,17 @@ Use these questions to demonstrate the AI doesn't make up data:
 ```
 1. Cost Analysis (warm-up)
      ↓
-2. Benchmarking (set up Hendrix story - includes MTTR comparison)
+2. Benchmarking (Hendrix story - MTTR, OEE, health scores)
      ↓
-3. OEE Performance (surface the problem machine)
+3. OEE Performance (surface AST-010 problem)
      ↓
-4. History & Permanent Fix (tribal knowledge)
+4. ⭐ History & Permanent Fix (HERO - Cortex Search tribal knowledge)
      ↓
 5. Failure Analysis (fleet-wide patterns)
      ↓
-6. Maintenance Strategy (opportunity sizing)
+6. Maintenance Strategy (reactive vs preventive - opportunity sizing)
      ↓
-7. ⭐ Hero Question (Cortex Search moment)
+7. Asset Value Analysis (cost/age red flags)
      ↓
 8. 🛡️ Trust Test (optional - "Plant C" or "CNC machines")
      ↓
