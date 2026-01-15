@@ -77,24 +77,27 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 **Talking Point**: "Instantly see which specific machines are dragging down your line - no digging through reports."
 
-**🔗 Transition to Q4**: *Point to Unit #02 in the results:*
-> "Unit #02 is 30 points below Unit #03 - that's a significant gap. Let's find out why..."
+**🎯 Demo Moment**: The agent proactively identified AST-010's issue AND connected it to the root cause. Highlight this:
+> "Notice the AI didn't just show numbers - it connected the OEE problem to the known wobbling issue. It's already telling us what's wrong."
+
+**🔗 Transition to Q4**: *Build on what the agent just revealed:*
+> "The AI mentioned a 'bracket repair' - let's ask exactly how to fix it..."
 
 ---
 
-### **4. Root Cause Analysis**
-**Ask**: "Why is Novus 600 Packaging 02 underperforming?"
+### **4. The Fix (Actionable Detail)**
+**Ask**: "How do I fix the pneumatic actuator bracket on the Novus 600?"
 
-*Alternative phrasing*: "What's wrong with the Novus 600 at Hendrix?"
+*Alternative phrasing*: "What's the repair procedure for the wobbling issue?"
 
 | What to Look For | ✅ Good Answer Includes |
 |------------------|------------------------|
-| Problem identified | Wobbling/vibration issue |
-| Root cause | Pneumatic actuator bracket loose |
+| Specific torque spec | 45 ft-lbs |
+| Thread locker | Mentioned as prevention |
 | Warning | "Bearings are NOT the problem" |
-| Fix details | Re-torque to 45 ft-lbs with thread locker |
+| Permanent fix | Replace bracket plate at next downtime |
 
-**Talking Point**: "The AI connected OEE data to technician notes and found the exact fix - this is tribal knowledge made accessible to everyone."
+**Talking Point**: "We went from 'which machine is slow' to 'grab a torque wrench and fix it' in two questions. That's actionable intelligence."
 
 ---
 
