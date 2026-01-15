@@ -35,153 +35,123 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
-## Demo Questions & Expected Answers
-
-### **1. Cost Analysis**
-**Ask**: "What's the total maintenance cost by plant?"
-
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Plant breakdown | Hendrix, Plant A, Plant B with dollar amounts |
-| Comparative insight | Hendrix costs higher due to more assets |
-| Cost per asset | ~$350-400 range across plants |
-
-**Talking Point**: "Instant cost visibility across all facilities - no more waiting for month-end reports."
+## 🎭 Demo Script (Exact Phrases to Say)
 
 ---
 
-### **2. Benchmarking (Key Story)**
-**Ask**: "How is Hendrix performing compared to our other plants?"
+### **Q1. Cost Analysis** (Warm-up)
 
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Multi-dimensional comparison | Costs, uptime, health scores, OEE |
-| Hendrix advantage | Higher uptime, better health scores |
-| Specific metrics | 95%+ uptime at Hendrix vs lower at legacy |
+**🗣️ SAY**: "Let's start simple. I want to see maintenance costs across all our plants."
 
-**Talking Point**: "Your Lighthouse facility is proving the model works - now you can quantify exactly how much better."
+**💬 TYPE**: "What's the total maintenance cost by plant?"
 
----
+**⏳ WAIT FOR RESPONSE**
 
-### **3. OEE Performance (Setup for the Problem)**
-**Ask**: "Show me OEE for each packaging machine - which ones are underperforming?"
+**🗣️ SAY AFTER**: "Instant cost visibility - Plant A, Plant B, Hendrix - all in seconds. No waiting for month-end reports. Notice how Hendrix has the most work orders but the lowest total cost? That efficiency story is already emerging."
 
-*Alternative phrasing*: "Break down OEE by individual packaging asset"
-
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Per-machine breakdown | Each Novus 600 unit listed separately |
-| Clear underperformer | Unit #02 (AST-010) at ~70.6% |
-| Top performer | Unit #03 at ~100% for contrast |
-| Gap identified | 30 point spread between best/worst |
-
-**Talking Point**: "Instantly see which specific machines are dragging down your line - no digging through reports."
-
-**🎯 Demo Moment**: The agent proactively identified AST-010's issue AND connected it to the root cause. Highlight this:
-> "Notice the AI didn't just show numbers - it connected the OEE problem to the known wobbling issue. It's already telling us what's wrong."
-
-**🔗 Transition to Q4**: *Build on what the agent just revealed:*
-> "The AI mentioned a 'bracket repair' - let's ask exactly how to fix it..."
+**➡️ TRANSITION**: "Let's dig deeper into that Hendrix advantage..."
 
 ---
 
-### **4. ⭐ History & Permanent Fix (HERO QUESTION - Tribal Knowledge)**
-**Ask**: "Has this wobbling issue happened before? What's the permanent fix?"
+### **Q2. Benchmarking** (The Hendrix Story)
 
-*Alternative phrasing*: "What's the history of the Novus 600 bracket problem?"
+**🗣️ SAY**: "Hendrix is our Lighthouse facility - the new best-practice plant. Let's see how it compares."
 
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| History | Previous occurrences documented |
-| Pattern | Recurring issue identified (every 6-8 weeks) |
-| Permanent solution | Replace bracket plate entirely |
-| Technician notes | Quoted directly ("check bracket FIRST") |
-| Warning | "Do NOT replace bearings" |
+**💬 TYPE**: "How is Hendrix performing compared to our other plants?"
 
-**🎯 Key Demo Moment**:
-> "The AI searched your technician notes and found this is a *recurring* issue - every 6-8 weeks. It gave us the permanent fix AND warned us not to waste time on bearings. That's tribal knowledge made searchable."
+**⏳ WAIT FOR RESPONSE**
 
-**🔗 Why This Works**: Q3 gave the immediate fix. Q4 adds the history and permanent solution - this is the Cortex Search magic moment.
+**🗣️ SAY AFTER**: "This is the money slide. Hendrix repairs are 56% faster. OEE is 28% higher. Costs are 55% lower. Your Lighthouse facility is proving the model works - and now you can quantify exactly how much better with hard numbers."
+
+**➡️ TRANSITION**: "Let's look at production performance. OEE tells us how efficiently our packaging lines are running..."
 
 ---
 
-### **5. Failure Analysis**
-**Ask**: "Which machines fail the most often and why?"
+### **Q3. OEE Performance** (Surface the Problem)
 
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Ranked list | Novus 600 Packaging highest |
-| Failure modes | VIB-09, MECH-ALIGN codes |
-| Root causes | Specific technical explanations |
-| Recommendations | Actionable next steps |
+**🗣️ SAY**: "OEE - Overall Equipment Effectiveness - combines availability, performance, and quality into one metric. Let's see how our packaging machines are doing."
 
-**Talking Point**: "Pattern recognition across all your work orders - instantly see which assets need attention."
+**💬 TYPE**: "Show me OEE for each packaging machine - which ones are underperforming?"
 
-**🔗 Transition to Q6**: *Bridge from failures to maintenance strategy:*
-> "We're seeing a lot of reactive repairs. Are we spending more time fixing or preventing failures?"
+**⏳ WAIT FOR RESPONSE**
+
+**🗣️ SAY AFTER**: "Look at this spread - Unit #03 is at 100%, but Unit #02 is dragging at 70%. That's a 30-point gap. And notice - the AI didn't just show numbers. It already connected this to a known wobbling issue and told us it's the pneumatic actuator bracket. It's proactively diagnosing the problem."
+
+**➡️ TRANSITION**: "The AI mentioned a bracket issue. Let's ask - has this happened before?"
 
 ---
 
-### **6. Maintenance Strategy**
-**Ask**: "Are we spending more time fixing broken machines or preventing failures?"
+### **Q4. ⭐ History & Permanent Fix** (HERO MOMENT - Tribal Knowledge)
 
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Clear verdict | "More time fixing" |
-| Split | 66% corrective / 34% preventive (hours) |
-| Cost impact | 78% of costs on reactive maintenance |
-| Benchmark | Industry best practice (60/40 preventive) |
-| Opportunity | 20-30% cost reduction potential |
+**🗣️ SAY**: "This is where it gets interesting. We're going to ask the AI to search technician notes - the tribal knowledge that usually lives in someone's head."
 
-**Talking Point**: "You're operating at the inverse of industry best practice. That's a 20-30% cost reduction opportunity the AI just surfaced."
+**💬 TYPE**: "Has this wobbling issue happened before? What's the permanent fix?"
 
----
+**⏳ WAIT FOR RESPONSE**
 
-### **7. Asset Value Analysis**
-**Ask**: "Which assets are costing us the most to maintain relative to their value?"
+**🎯 SAY AFTER (KEY MOMENT)**: "This is the magic. The AI searched your technician notes and found this is a recurring issue - happens every 6-8 weeks. It gave us the exact fix - torque to 45 foot-pounds with thread locker. AND it warned us not to waste time replacing bearings - that's a red herring for this specific machine. A technician could take this answer, grab a torque wrench, and fix it right now. No hunting through manuals, no calling the one guy who knows. That's tribal knowledge made searchable."
 
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Cost ranking | Top 3 highest maintenance cost assets |
-| Age consideration | Young assets with high costs flagged |
-| Health scores | Poor scores for age highlighted |
-| Contrast | Best performers (Hendrix $75-113) vs worst ($1,500+) |
-
-**Talking Point**: "A 1.5-year-old Novus 600 costing $1,200/year while a 6-year-old costs $36/year? That's a red flag the AI surfaced instantly."
+**➡️ TRANSITION**: "Let's zoom out and look at failure patterns across all our equipment..."
 
 ---
 
-### **8. 🛡️ TRUST TEST - No Hallucinations**
+### **Q5. Failure Analysis** (Fleet Patterns)
 
-Use these questions to demonstrate the AI doesn't make up data:
+**🗣️ SAY**: "Beyond this one machine, which assets across our entire fleet are giving us the most trouble?"
 
-#### **Option A: Non-existent Plant**
-**Ask**: "What's the maintenance cost for Plant C?"
+**💬 TYPE**: "Which machines fail the most often and why?"
 
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Acknowledges gap | "Plant C does not exist in our system" |
-| Lists valid options | Plant A, Plant B, Hendrix |
-| No fake data | Does NOT invent costs for Plant C |
-| Helpful redirect | Offers to show real plant data |
+**⏳ WAIT FOR RESPONSE**
 
-#### **Option B: Wrong Equipment Type**
-**Ask**: "How are our CNC machines performing?"
+**🗣️ SAY AFTER**: "Pattern recognition across all your work orders. The AI ranked our problem assets, showed failure codes, and even distinguished between real bearing failures on one machine versus the misdiagnosed bracket issue on another. That kind of pattern recognition prevents wasted repairs."
 
-| What to Look For | ✅ Good Answer Includes |
-|------------------|------------------------|
-| Acknowledges gap | "We don't have CNC machines in this system" |
-| Explains scope | Lists actual equipment (Sterilizers, Washers, etc.) |
-| Domain awareness | "This tracks medical equipment, not manufacturing" |
-| No fake data | Does NOT invent CNC performance metrics |
+**➡️ TRANSITION**: "We're seeing a lot of reactive repairs here. Let me ask a strategic question..."
 
-**🎯 Key Demo Moment**:
-> "I just asked about something that doesn't exist in our data. The AI didn't make up numbers - it told me the truth and offered to help with what it actually knows. This is trustworthy AI that knows its boundaries."
+---
 
-**Why This Matters**:
-- Builds confidence that insights are grounded in real data
-- Shows the AI won't lead users astray with fabricated information
-- Critical for decision-making trust
+### **Q6. Maintenance Strategy** (The Big Opportunity)
+
+**🗣️ SAY**: "Here's a question for leadership - are we being proactive or reactive with our maintenance?"
+
+**💬 TYPE**: "Are we spending more time fixing broken machines or preventing failures?"
+
+**⏳ WAIT FOR RESPONSE**
+
+**🗣️ SAY AFTER**: "There it is. 81% of our maintenance costs are reactive - fixing things after they break. Only 19% is preventive. Every dollar spent on prevention saves $3.60 in reactive repairs. You're operating at the inverse of industry best practice. The AI just surfaced a 20-30% cost reduction opportunity."
+
+**➡️ TRANSITION**: "One more question about asset economics..."
+
+---
+
+### **Q7. Asset Value Analysis** (Cost Red Flags)
+
+**🗣️ SAY**: "Let's look at which assets are giving us the worst return on maintenance investment."
+
+**💬 TYPE**: "Which assets are costing us the most to maintain relative to their value?"
+
+**⏳ WAIT FOR RESPONSE**
+
+**🗣️ SAY AFTER**: "Look at this - a 1.5-year-old Novus 600 costing $1,200 per year, while a 6-year-old Reliance washer costs just $36 per year. That's a red flag the AI surfaced instantly. New equipment shouldn't cost more to maintain than old equipment. This helps you make data-driven replacement decisions."
+
+**➡️ TRANSITION**: "One final thing I want to show you - how the AI handles questions about data it doesn't have..."
+
+---
+
+### **Q8. 🛡️ Trust Test** (No Hallucinations)
+
+**🗣️ SAY**: "This is important for building trust. Let me ask about something that doesn't exist in our data."
+
+**💬 TYPE**: "How are our CNC machines performing?"
+
+**⏳ WAIT FOR RESPONSE**
+
+**🗣️ SAY AFTER**: "Perfect. The AI didn't make up numbers. It told us the truth - 'We don't have CNC machines in this system' - and listed what we actually do have. This is trustworthy AI that knows its boundaries. When it gives you an answer, you can trust it's grounded in real data."
+
+---
+
+### **Closing** (30 seconds)
+
+**🗣️ SAY**: "In about 15 minutes, we went from 'what are our costs' to 'here's exactly how to fix your worst-performing machine' - including tribal knowledge from technician notes. We identified a 20-30% cost reduction opportunity in your maintenance strategy. And we proved the Hendrix Lighthouse model is working with hard numbers. Questions?"
 
 ---
 
