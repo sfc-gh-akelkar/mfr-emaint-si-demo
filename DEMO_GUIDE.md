@@ -63,19 +63,22 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 ---
 
-### **3. OEE Performance**
-**Ask**: "What's our OEE for packaging equipment?"
+### **3. OEE Performance (Setup for the Problem)**
+**Ask**: "Show me OEE for each packaging machine - which ones are underperforming?"
+
+*Alternative phrasing*: "Break down OEE by individual packaging asset"
 
 | What to Look For | ✅ Good Answer Includes |
 |------------------|------------------------|
-| OEE percentage | ~81-82% overall |
-| Breakdown | By asset showing #02 at ~70.6% (underperforming) |
-| Context | World-class benchmark (85%+) mentioned |
+| Per-machine breakdown | Each Novus 600 unit listed separately |
+| Clear underperformer | Unit #02 (AST-010) at ~70.6% |
+| Top performer | Unit #03 at ~100% for contrast |
+| Gap identified | 30 point spread between best/worst |
 
-**Talking Point**: "Real-time OEE visibility from your MES data - see performance at asset level."
+**Talking Point**: "Instantly see which specific machines are dragging down your line - no digging through reports."
 
-**🔗 Transition to Q4**: *Point to the underperforming unit #02 in the results:*
-> "Notice Novus 600 #02 is dragging down the average at 70%. Let's dig into why..."
+**🔗 Transition to Q4**: *Point to Unit #02 in the results:*
+> "Unit #02 is 30 points below Unit #03 - that's a significant gap. Let's find out why..."
 
 ---
 
