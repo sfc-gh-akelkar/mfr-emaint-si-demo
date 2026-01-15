@@ -61,7 +61,7 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 
 **⏳ WAIT FOR RESPONSE**
 
-**🗣️ SAY AFTER**: "This is the money slide. Hendrix repairs are 56% faster. OEE is 28% higher. Costs are 55% lower. Your Lighthouse facility is proving the model works - and now you can quantify exactly how much better with hard numbers."
+**🗣️ SAY AFTER**: "This is the key insight. Hendrix repairs are 56% faster. OEE is 28% higher. Costs are 55% lower. Your Lighthouse facility is proving the model works - and now you can quantify exactly how much better with hard numbers."
 
 **➡️ TRANSITION**: "Let's look at production performance. OEE tells us how efficiently our packaging lines are running..."
 
