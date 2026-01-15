@@ -116,12 +116,12 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 **Talking Point**: "Pattern recognition across all your work orders - instantly see which assets need attention."
 
 **🔗 Transition to Q6**: *Bridge from failures to maintenance strategy:*
-> "We're seeing a lot of reactive repairs. Are we spending more time fixing or preventing?"
+> "We're seeing a lot of reactive repairs. Are we spending more time fixing or preventing failures?"
 
 ---
 
 ### **6. Maintenance Strategy**
-**Ask**: "Are we spending more time fixing broken machines or preventing breaks?"
+**Ask**: "Are we spending more time fixing broken machines or preventing failures?"
 
 | What to Look For | ✅ Good Answer Includes |
 |------------------|------------------------|
