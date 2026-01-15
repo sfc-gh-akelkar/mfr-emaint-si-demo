@@ -69,23 +69,29 @@ USE ROLE SF_INTELLIGENCE_DEMO;
 | What to Look For | ✅ Good Answer Includes |
 |------------------|------------------------|
 | OEE percentage | ~81-82% overall |
-| Breakdown | By asset or shift |
+| Breakdown | By asset showing #02 at ~70.6% (underperforming) |
 | Context | World-class benchmark (85%+) mentioned |
 
 **Talking Point**: "Real-time OEE visibility from your MES data - see performance at asset level."
 
+**🔗 Transition to Q4**: *Point to the underperforming unit #02 in the results:*
+> "Notice Novus 600 #02 is dragging down the average at 70%. Let's dig into why..."
+
 ---
 
 ### **4. Root Cause Analysis**
-**Ask**: "What's causing the Novus 600 machine at Hendrix to wobble?"
+**Ask**: "Why is Novus 600 Packaging 02 underperforming?"
+
+*Alternative phrasing*: "What's wrong with the Novus 600 at Hendrix?"
 
 | What to Look For | ✅ Good Answer Includes |
 |------------------|------------------------|
+| Problem identified | Wobbling/vibration issue |
 | Root cause | Pneumatic actuator bracket loose |
 | Warning | "Bearings are NOT the problem" |
 | Fix details | Re-torque to 45 ft-lbs with thread locker |
 
-**Talking Point**: "The AI searched technician notes and found the exact fix - this is tribal knowledge made accessible to everyone."
+**Talking Point**: "The AI connected OEE data to technician notes and found the exact fix - this is tribal knowledge made accessible to everyone."
 
 ---
 
