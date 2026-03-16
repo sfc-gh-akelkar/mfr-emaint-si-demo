@@ -1,38 +1,52 @@
-# STERIS Factory of the Future - Architecture
+# STERIS Predictive Maintenance - Architecture
 
-## Key Pieces of the Puzzle
+## Medallion Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                                                                                 │
-│                          ❄️ Snowflake Intelligence                              │
-│                              User Interface                                     │
+│                         Snowflake Snowpark ML Platform                          │
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                                  AI & ML                                        │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐ │
-│  │  Cortex Analyst │  │  Cortex Search  │  │  Snowpark ML    │  │   Cortex    │ │
-│  │─────────────────│  │─────────────────│  │─────────────────│  │   Agents    │ │
-│  │ Natural Language│  │   Technician    │  │    Failure      │  │─────────────│ │
-│  │    To SQL       │  │    Knowledge    │  │   Prediction    │  │Orchestration│ │
-│  │                 │  │    Retrieval    │  │    Models       │  │  & Tooling  │ │
-│  │ ✅ In Demo      │  │ ✅ In Demo      │  │ 🔮 Future       │  │ ✅ In Demo  │ │
-│  └─────────────────┘  └─────────────────┘  └─────────────────┘  └─────────────┘ │
+│                              ML & PREDICTIONS                                   │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                 │
+│  │  XGBoost        │  │  XGBoost        │  │  Isolation      │                 │
+│  │  Regressor      │  │  Classifier     │  │  Forest         │                 │
+│  │─────────────────│  │─────────────────│  │─────────────────│                 │
+│  │ RUL Prediction  │  │ Failure Mode    │  │ Anomaly         │                 │
+│  │ (days to fail)  │  │ Identification  │  │ Detection       │                 │
+│  │                 │  │                 │  │                 │                 │
+│  │ ✅ In Demo      │  │ ✅ In Demo      │  │ ✅ In Demo      │                 │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                                   Data                                          │
+│                            FEATURE ENGINEERING                                  │
 │  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────────┐  │
-│  │    Ignition SCADA     │  │      eMaint CMMS      │  │    Sepasoft MES     │  │
+│  │   SCADA-Derived       │  │    CMMS-Derived        │  │   Composite         │  │
 │  │───────────────────────│  │───────────────────────│  │─────────────────────│  │
-│  │ • Vibration Sensors   │  │ • Work Orders         │  │ • Production Runs   │  │
-│  │ • Temperature         │  │ • Asset Registry      │  │ • OEE Metrics       │  │
-│  │ • Pressure            │  │ • Technician Notes    │  │ • Quality Data      │  │
-│  │ • Equipment Status    │  │ • Maintenance History │  │ • Availability      │  │
+│  │ • Rolling avg (7d,30d)│  │ • Cumulative WOs      │  │ • Asset age         │  │
+│  │ • Trend % (vib,temp)  │  │ • Downtime hours      │  │ • Criticality       │  │
+│  │ • Z-scores            │  │ • Avg MTTR            │  │ • Days since maint  │  │
+│  │ • Daily stats         │  │ • Days since corrective│  │                    │  │
+│  └───────────────────────┘  └───────────────────────┘  └─────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                RAW DATA                                         │
+│  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────────┐  │
+│  │    Ignition SCADA     │  │      eMaint CMMS      │  │   Failure Events    │  │
+│  │───────────────────────│  │───────────────────────│  │─────────────────────│  │
+│  │ • 175,200 readings    │  │ • Work Orders         │  │ • 19 labeled events │  │
+│  │ • Vibration (mm/s)    │  │ • Asset Master (20)   │  │ • 4 failure types   │  │
+│  │ • Motor Temp (°C)     │  │ • Component history   │  │ • Component mapping │  │
+│  │ • Motor Current (A)   │  │ • Repair costs        │  │                     │  │
+│  │ • Ambient Temp (°C)   │  │                       │  │                     │  │
 │  └───────────────────────┘  └───────────────────────┘  └─────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -41,16 +55,16 @@
 
 ## Component Mapping
 
-| Layer | Component | STERIS Implementation | Status |
-|-------|-----------|----------------------|--------|
-| **Interface** | Snowflake Intelligence | Conversational AI Chatbot | ✅ Live |
-| **AI & ML** | Cortex Analyst | `MAINTENANCE_SEMANTIC_VW` | ✅ In Demo |
-| **AI & ML** | Cortex Search | `TECH_NOTES_SEARCH_SERVICE` | ✅ In Demo |
-| **AI & ML** | Snowpark ML | Failure Prediction Models | 🔮 Future |
-| **AI & ML** | Cortex Agents | `STERIS_RELIABILITY_AGENT` | ✅ In Demo |
-| **Data** | IoT/SCADA | `IGNITION_SCADA_TELEMETRY` | ✅ In Demo |
-| **Data** | CMMS | `EMAINT_ASSETS`, `EMAINT_WORK_ORDERS`, `TECH_NOTES` | ✅ In Demo |
-| **Data** | MES | `SEPASOFT_MES_PRODUCTION` | ✅ In Demo |
+| Layer | Component | Implementation | Status |
+|-------|-----------|---------------|--------|
+| **ML** | RUL Regression | `STERIS_RUL_REGRESSOR` (XGBoost, 200 trees) | ✅ In Demo |
+| **ML** | Failure Classification | `STERIS_FAILURE_CLASSIFIER` (XGBoost, 4 classes) | ✅ In Demo |
+| **ML** | Anomaly Detection | `STERIS_ANOMALY_DETECTOR` (IsolationForest) | ✅ In Demo |
+| **Features** | Training Features | `VW_ML_TRAINING_FEATURES` (7,300 rows, 24 features) | ✅ In Demo |
+| **Features** | Labeled Dataset | `VW_ML_LABELED_DATASET` (1,261 balanced samples) | ✅ In Demo |
+| **Raw** | SCADA Telemetry | `SENSOR_READINGS_GENERATED` (175,200 hourly readings) | ✅ In Demo |
+| **Raw** | Asset Registry | `ASSET_MASTER` (20 assets) | ✅ In Demo |
+| **Raw** | Failure History | `FAILURE_EVENTS` (19 labeled failures) | ✅ In Demo |
 
 ---
 
@@ -58,79 +72,76 @@
 
 ```
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│   Ignition   │     │    eMaint    │     │   Sepasoft   │
-│    SCADA     │     │    CMMS      │     │     MES      │
+│   Ignition   │     │    eMaint    │     │   Failure    │
+│    SCADA     │     │    CMMS      │     │   Labels     │
 └──────┬───────┘     └──────┬───────┘     └──────┬───────┘
        │                    │                    │
        ▼                    ▼                    ▼
 ┌─────────────────────────────────────────────────────────┐
-│                   Snowflake (Raw Data)                  │
-│  IGNITION_SCADA_TELEMETRY │ EMAINT_* │ SEPASOFT_MES_*  │
+│               RAW Schema (Bronze Layer)                  │
+│  SENSOR_READINGS_GENERATED │ ASSET_MASTER │ FAILURE_EVENTS│
 └─────────────────────────────┬───────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────┐
-│                   Semantic Layer                        │
-│          MAINTENANCE_SEMANTIC_VW (Cortex Analyst)       │
-│          TECH_NOTES_SEARCH_SERVICE (Cortex Search)      │
+│             FEATURES Schema (Silver Layer)               │
+│    VW_ML_TRAINING_FEATURES  │  VW_ML_LABELED_DATASET    │
+│    Rolling stats, trends, z-scores, CMMS metrics        │
 └─────────────────────────────┬───────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────┐
-│                   Cortex Agent                          │
-│              STERIS_RELIABILITY_AGENT                   │
-│     Orchestrates Analyst + Search for unified answers   │
-└─────────────────────────────┬───────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────┐
-│                 Snowflake Intelligence                  │
-│            Natural Language Q&A Interface               │
+│               ML Schema (Gold Layer)                     │
+│    Model Registry: 3 registered models                   │
+│    COMPONENT_RUL_PREDICTIONS │ PREDICTION_EVIDENCE       │
+│    FEATURE_IMPORTANCE_RESULTS │ MODEL_PREDICTIONS        │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Slide-Ready Version (Copy for PowerPoint)
+## ML Pipeline Details
 
-### Title: STERIS Factory of the Future - Architecture
+### XGBoost RUL Regressor
 
-**Top Layer:**
-- **Snowflake Intelligence** - User Interface
+Predicts continuous **days to failure** for each asset.
 
-**Middle Layer (AI & ML):**
-| Cortex Analyst | Cortex Search | Snowpark ML | Cortex Agents |
-|----------------|---------------|-------------|---------------|
-| Natural Language to SQL | Technician Knowledge Retrieval | Failure Prediction Models | Orchestration & Tooling |
+- **Algorithm**: XGBoost Regressor (reg:squarederror)
+- **Hyperparameters**: 200 trees, max_depth=6, lr=0.05, subsample=0.8
+- **Input**: 24 SCADA + CMMS features
+- **Output**: Predicted days until next failure
+- **Registered as**: `STERIS_RUL_REGRESSOR`
 
-**Bottom Layer (Data):**
-| Ignition SCADA | eMaint CMMS | Sepasoft MES |
-|----------------|-------------|--------------|
-| Vibration Sensors | Work Orders | Production Runs |
-| Temperature | Asset Registry | OEE Metrics |
-| Pressure | Technician Notes | Quality Data |
-| Equipment Status | Maintenance History | Availability |
+### XGBoost Failure Mode Classifier
+
+Identifies **which component will fail** across 4 failure modes.
+
+- **Algorithm**: XGBoost Classifier (multi:softprob)
+- **Hyperparameters**: 200 trees, max_depth=5, lr=0.05
+- **Classes**: BEARING_WEAR, BRACKET_LOOSE, MOTOR_OVERLOAD, ELECTRICAL_FAULT
+- **Component Mapping**:
+  - BEARING_WEAR -> Motor Bearing
+  - BRACKET_LOOSE -> Mounting Bracket
+  - MOTOR_OVERLOAD -> Drive Motor
+  - ELECTRICAL_FAULT -> Control Board
+- **Registered as**: `STERIS_FAILURE_CLASSIFIER`
+
+### Isolation Forest Anomaly Detector
+
+Detects **abnormal sensor patterns** that deviate from normal operation.
+
+- **Algorithm**: IsolationForest (unsupervised)
+- **Registered as**: `STERIS_ANOMALY_DETECTOR`
 
 ---
 
-## What Each Component Does
+## Feature Engineering (24 Features)
 
-### Cortex Analyst (Semantic View)
-- Translates natural language to SQL
-- Understands "maintenance cost", "MTTR", "OEE"
-- Powers structured data queries
-
-### Cortex Search (Tech Notes Service)
-- Searches unstructured technician notes
-- Finds tribal knowledge and past fixes
-- Semantic search - understands meaning, not just keywords
-
-### Cortex Agent (Reliability Agent)
-- Orchestrates Analyst + Search together
-- Decides which tool to use for each question
-- Provides unified, coherent answers
-
-### Snowpark ML (Future)
-- Predictive failure models
-- Anomaly detection
-- Remaining useful life estimation
+| Category | Features | Source |
+|----------|----------|--------|
+| **Daily Sensor Stats** | vibration avg/max/min/std, motor temp avg/max, current avg/max | SCADA |
+| **Rolling Averages** | vibration 7d avg, 7d max, 30d avg | SCADA |
+| **Trend Indicators** | vibration trend 7d/30d, temp trend 7d, current trend 7d | SCADA |
+| **Anomaly Signals** | vibration z-score, temp z-score | SCADA |
+| **Asset Context** | asset age days, days since last maintenance, criticality score | CMMS + Master |
+| **CMMS History** | cumulative corrective WOs, cumulative downtime hrs, avg MTTR, days since last corrective | CMMS |

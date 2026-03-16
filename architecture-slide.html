@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STERIS Factory of the Future - Architecture</title>
+    <title>STERIS Predictive Maintenance - Architecture</title>
     <style>
         * {
             margin: 0;
@@ -96,7 +96,7 @@
         
         .components {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
         
@@ -118,15 +118,6 @@
             font-size: 12px;
             color: #c0d8f0;
             line-height: 1.4;
-        }
-        
-        .component.future {
-            opacity: 0.6;
-            border: 2px dashed #4a6fa5;
-        }
-        
-        .component.future h3::after {
-            content: " 🔮";
         }
         
         .data-layer .components {
@@ -169,81 +160,103 @@
             font-weight: bold;
             font-size: 16px;
         }
+
+        .subtitle {
+            font-size: 13px;
+            color: #a0c4e8;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body>
     <div class="slide">
         <div class="header">
-            <h1>STERIS Factory of the Future: Key Pieces of the Puzzle</h1>
+            <h1>STERIS Predictive Maintenance: ML Architecture</h1>
             <div class="logo">
                 <span class="steris-logo">STERIS</span>
-                <span class="snowflake">❄️</span>
+                <span class="snowflake"></span>
             </div>
         </div>
         
         <div class="architecture">
-            <!-- Snowflake Intelligence Layer -->
             <div class="layer top-layer">
-                <h2>❄️ Snowflake Intelligence</h2>
-                <p>User Interface</p>
+                <h2>Predictions & Evidence</h2>
+                <p>Component-Level RUL | Failure Mode ID | Feature Importance</p>
             </div>
             
-            <div class="connector">▼</div>
+            <div class="connector">&#9650;</div>
             
-            <!-- AI & ML Layer -->
             <div class="layer">
-                <div class="layer-title">AI & ML</div>
+                <div class="layer-title">ML MODELS (Snowpark ML + Model Registry)</div>
                 <div class="components">
                     <div class="component">
-                        <h3>Cortex Analyst</h3>
-                        <p>Natural Language<br>To<br>SQL</p>
+                        <h3>XGBoost Regressor</h3>
+                        <p>Remaining Useful Life<br>(days to failure)</p>
+                        <p class="subtitle">200 trees, depth 6</p>
                     </div>
                     <div class="component">
-                        <h3>Cortex Search</h3>
-                        <p>Technician<br>Knowledge<br>Retrieval</p>
-                    </div>
-                    <div class="component future">
-                        <h3>Snowpark ML</h3>
-                        <p>Failure<br>Prediction<br>Models</p>
+                        <h3>XGBoost Classifier</h3>
+                        <p>Failure Mode ID<br>(4 failure types)</p>
+                        <p class="subtitle">200 trees, depth 5</p>
                     </div>
                     <div class="component">
-                        <h3>Cortex Agents</h3>
-                        <p>Orchestration<br>&<br>Tooling</p>
+                        <h3>Isolation Forest</h3>
+                        <p>Anomaly Detection<br>(unsupervised)</p>
+                        <p class="subtitle">Sensor pattern outliers</p>
                     </div>
                 </div>
             </div>
             
-            <div class="connector">▼</div>
+            <div class="connector">&#9650;</div>
             
-            <!-- Data Layer -->
+            <div class="layer">
+                <div class="layer-title">FEATURE ENGINEERING (24 Features)</div>
+                <div class="components">
+                    <div class="component">
+                        <h3>SCADA Features</h3>
+                        <p>Rolling averages (7d, 30d)<br>Trend percentages<br>Z-scores<br>Daily stats</p>
+                    </div>
+                    <div class="component">
+                        <h3>CMMS Features</h3>
+                        <p>Cumulative WOs<br>Downtime hours<br>Avg MTTR<br>Days since corrective</p>
+                    </div>
+                    <div class="component">
+                        <h3>Asset Context</h3>
+                        <p>Asset age (days)<br>Criticality score<br>Days since maintenance</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connector">&#9650;</div>
+            
             <div class="layer data-layer">
-                <div class="layer-title">Data</div>
+                <div class="layer-title">RAW DATA SOURCES</div>
                 <div class="components">
                     <div class="data-component">
                         <h3>Ignition SCADA</h3>
                         <ul>
-                            <li>Vibration Sensors</li>
-                            <li>Temperature</li>
-                            <li>Pressure</li>
-                            <li>Equipment Status</li>
+                            <li>175,200 sensor readings</li>
+                            <li>Vibration (mm/s)</li>
+                            <li>Motor Temperature (&deg;C)</li>
+                            <li>Motor Current (A)</li>
                         </ul>
                     </div>
                     <div class="data-component">
                         <h3>eMaint CMMS</h3>
                         <ul>
-                            <li>Work Orders</li>
-                            <li>Asset Registry</li>
-                            <li>Technician Notes</li>
-                            <li>Maintenance History</li>
+                            <li>20 assets, work orders</li>
+                            <li>Component replacements</li>
+                            <li>Repair times &amp; costs</li>
+                            <li>Maintenance history</li>
                         </ul>
                     </div>
                     <div class="data-component">
-                        <h3>Sepasoft MES</h3>
+                        <h3>Failure Events</h3>
                         <ul>
-                            <li>Production Runs</li>
-                            <li>OEE Metrics</li>
-                            <li>Quality Data</li>
-                            <li>Availability</li>
+                            <li>19 labeled failures</li>
+                            <li>BEARING_WEAR (8)</li>
+                            <li>BRACKET_LOOSE (6)</li>
+                            <li>MOTOR_OVERLOAD (4)</li>
                         </ul>
                     </div>
                 </div>

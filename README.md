@@ -1,236 +1,187 @@
-# STERIS "Factory of the Future" AI Reliability Platform
+# STERIS Predictive Maintenance & RUL Platform
 
 ## Overview
 
-This demo showcases how **Snowflake Intelligence** can transform STERIS's maintenance operations from manual, Excel-based workflows to an AI-powered Asset Reliability Platform. The demo is designed for the **Hendrix Lighthouse** facility and includes data from legacy plants for benchmarking.
+This demo showcases **Snowflake's native ML capabilities** for STERIS's asset reliability program. Using Snowpark ML, XGBoost, and the Snowflake Model Registry, we build predictive models that tell maintenance teams **when** equipment will fail, **what** component will fail, and **why** — directly from SCADA telemetry and CMMS work order history.
+
+**Audience**: Perdita Beck (Product Owner), STERIS IT & Operations Leadership
 
 ## Business Context
 
-STERIS is a leader in infection prevention and sterilization. Their current maintenance strategy has a significant gap:
-- The **eMaint CMMS** is poorly deployed and underutilized
-- Data flows manually via Excel and email
-- Critical tribal knowledge is trapped in technician notebooks
+STERIS is a leader in infection prevention and sterilization. Their Hendrix Lighthouse facility generates rich data from SCADA sensors and eMaint CMMS, but today that data is used reactively. This platform transforms it into **proactive, component-level failure predictions**.
 
-This demo shows how Snowflake Intelligence solves these challenges.
+| Challenge | Solution |
+|-----------|----------|
+| Reactive maintenance | XGBoost regression predicts RUL in days |
+| "Which machine is at risk?" | Multi-class classifier identifies the failing component |
+| Black-box risk scores | Feature importance shows exactly why each prediction was made |
+| Disconnected data silos | SCADA + CMMS features fused in a single ML pipeline |
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                     SNOWFLAKE INTELLIGENCE                               │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  ┌──────────────────────────────────────────────────────────────────┐   │
-│  │                    CORTEX AGENT                                   │   │
-│  │            "STERIS Asset Reliability Assistant"                   │   │
-│  │                                                                   │   │
-│  │   ┌─────────────────────┐     ┌─────────────────────────────┐   │   │
-│  │   │   CORTEX ANALYST    │     │     CORTEX SEARCH           │   │   │
-│  │   │                     │     │                             │   │   │
-│  │   │  • Maintenance      │     │  • Technician Notes        │   │   │
-│  │   │    Costs & MTTR     │     │  • Troubleshooting Tips    │   │   │
-│  │   │  • Asset Health     │     │  • Repair Procedures       │   │   │
-│  │   │  • OEE Metrics      │     │  • Tribal Knowledge        │   │   │
-│  │   │  • Plant Benchmarks │     │                             │   │   │
-│  │   │                     │     │                             │   │   │
-│  │   └─────────┬───────────┘     └──────────────┬──────────────┘   │   │
-│  │             │                                │                    │   │
-│  └─────────────┼────────────────────────────────┼────────────────────┘   │
-│                │                                │                        │
-│  ┌─────────────▼───────────┐     ┌──────────────▼──────────────┐        │
-│  │    SEMANTIC VIEW        │     │   CORTEX SEARCH SERVICE     │        │
-│  │  MAINTENANCE_SEMANTIC_VW│     │  TECH_NOTES_SEARCH_SERVICE  │        │
-│  └─────────────┬───────────┘     └──────────────┬──────────────┘        │
-│                │                                │                        │
-└────────────────┼────────────────────────────────┼────────────────────────┘
-                 │                                │
-      ┌──────────▼────────────────────────────────▼──────────┐
-      │                    RAW DATA LAYER                     │
-      ├───────────────┬──────────────┬───────────────────────┤
-      │  eMaint CMMS  │ Ignition     │  Sepasoft MES         │
-      │  • Assets     │ SCADA        │  • Production         │
-      │  • Work Orders│ • Telemetry  │  • OEE                │
-      │  • Tech Notes │ • Alarms     │  • Quality            │
-      └───────────────┴──────────────┴───────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        DATA SOURCES                                         │
+│  ┌─────────────────────────┐     ┌─────────────────────────┐               │
+│  │    Ignition SCADA       │     │      eMaint CMMS        │               │
+│  │  Vibration (mm/s)       │     │  Work Orders            │               │
+│  │  Motor Temperature (°C) │     │  Failure Events         │               │
+│  │  Motor Current (A)      │     │  Component Replacements │               │
+│  │  Ambient Temp (°C)      │     │  Repair Times & Costs   │               │
+│  │  Cycle Count            │     │                         │               │
+│  └────────────┬────────────┘     └────────────┬────────────┘               │
+└───────────────┼────────────────────────────────┼───────────────────────────┘
+                │              RAW SCHEMA         │
+                ▼                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      FEATURE ENGINEERING (FEATURES Schema)                  │
+│                                                                             │
+│  Rolling Averages (7d, 30d)  │  Trend % (vibration, temp, current)         │
+│  Z-Scores (anomaly signals)  │  CMMS: cumulative WOs, downtime, MTTR      │
+│  Asset age, criticality      │  Days since last corrective maintenance     │
+│                                                                             │
+│  VW_ML_TRAINING_FEATURES (7,300 rows)                                      │
+│  VW_ML_LABELED_DATASET (1,261 labeled samples)                             │
+└─────────────────────────────────┬───────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      ML MODELS (ML Schema + Model Registry)                 │
+│                                                                             │
+│  ┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────┐  │
+│  │  XGBoost Regressor   │  │  XGBoost Classifier  │  │  IsolationForest │  │
+│  │  STERIS_RUL_REGRESSOR│  │  STERIS_FAILURE_     │  │  STERIS_ANOMALY_ │  │
+│  │                      │  │  CLASSIFIER          │  │  DETECTOR        │  │
+│  │  Predicts: RUL in    │  │  Predicts: Failure   │  │  Detects: Sensor │  │
+│  │  days until failure   │  │  mode (BEARING_WEAR, │  │  anomalies from  │  │
+│  │                      │  │  BRACKET_LOOSE,      │  │  normal operating│  │
+│  │                      │  │  MOTOR_OVERLOAD,     │  │  patterns        │  │
+│  │                      │  │  ELECTRICAL_FAULT)   │  │                  │  │
+│  └──────────────────────┘  └──────────────────────┘  └──────────────────┘  │
+└─────────────────────────────────┬───────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      PREDICTIONS & EVIDENCE (ML Schema)                     │
+│                                                                             │
+│  COMPONENT_RUL_PREDICTIONS  │  PREDICTION_EVIDENCE  │  FEATURE_IMPORTANCE  │
+│  "AST-010 Motor Bearing:    │  SCADA + CMMS signals │  Top 24 features     │
+│   12 days RUL, 87% conf"   │  driving prediction   │  ranked by impact    │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Key Demo Features
-
-### 1. The Novus 600 Wobbling Issue (Star of the Demo!)
-
-The demo includes a carefully crafted scenario around a recurring maintenance issue:
-
-- **Asset**: Novus 600 Packaging Machine #02 (AST-010) at Hendrix
-- **Symptom**: Wobbling during operation, vibration spike to 4.5mm/s
-- **Red Herring**: Standard troubleshooting suggests bearing replacement
-- **Actual Fix**: Realign the pneumatic actuator bracket (45 ft-lbs torque)
-
-This demonstrates how the AI can surface tribal knowledge that would otherwise require finding the right technician to ask.
-
-### 2. Plant Benchmarking
-
-Compare the new Hendrix Lighthouse facility against legacy Plant A and Plant B:
-- Asset health scores
-- MTTR (Mean Time to Repair)
-- Maintenance costs
-- Preventive vs Corrective ratio
-- OEE (Overall Equipment Effectiveness)
-
-### 3. Data Integration
-
-The demo combines data from multiple systems:
-- **eMaint CMMS**: Assets, work orders, technician notes
-- **Ignition SCADA**: Real-time telemetry (vibration, temperature, pressure)
-- **Sepasoft MES**: Production data and OEE metrics
-
-## Quick Start - Setup Instructions
+## Quick Start
 
 ### Prerequisites
 
-1. Snowflake account with Intelligence features enabled
+1. Snowflake account with Snowpark ML enabled
 2. Role `SF_INTELLIGENCE_DEMO` with appropriate privileges
-3. Snowsight or SnowSQL access
+3. Warehouse `STERIS_ANALYTICS_WH`
 
-### Simple Setup (Just Run SQL!)
-
-All demo data is embedded directly in the SQL scripts - no CSV uploads or staging required!
-
-**Run these scripts in order in Snowsight:**
+### Setup (Run SQL scripts in order)
 
 | Step | Script | Description |
 |------|--------|-------------|
 | 1 | `sql/01_setup_database.sql` | Create database, schemas, and warehouse |
 | 2 | `sql/02_create_raw_tables.sql` | Create tables and insert all demo data |
-| 3 | `sql/03_create_curated_views.sql` | Create joined analytical views |
-| 4 | `sql/04_create_semantic_view.sql` | Create Semantic View for Cortex Analyst |
-| 5 | `sql/05_create_cortex_search.sql` | Create Cortex Search Service for tech notes |
-| 6 | `sql/06_create_cortex_agent.sql` | Create the Cortex Agent |
+| 3 | `sql/03_create_curated_views.sql` | Create feature engineering views |
 
-**Using SnowSQL:**
 ```bash
 cd sql
 snowsql -f 01_setup_database.sql
 snowsql -f 02_create_raw_tables.sql
 snowsql -f 03_create_curated_views.sql
-snowsql -f 04_create_semantic_view.sql
-snowsql -f 05_create_cortex_search.sql
-snowsql -f 06_create_cortex_agent.sql
 ```
 
-### Verify Setup
+### Run the Demo
 
-After running all scripts, use `sql/07_demo_queries.sql` to verify the setup and explore the data.
+Open **`demo_notebook.ipynb`** in Snowsight. This single notebook walks through the entire pipeline:
+
+1. Source data exploration (SCADA telemetry + CMMS work orders)
+2. Data quality validation (null rates, outlier detection, reading frequency)
+3. Feature engineering (rolling stats, trends, z-scores, CMMS metrics)
+4. Model training (XGBoost regressor + classifier + anomaly detector)
+5. Fleet-wide predictions with component-level RUL and failure mode ID
 
 ## Demo Data Summary
 
 | Table | Records | Description |
 |-------|---------|-------------|
-| EMAINT_ASSETS | 20 | Equipment master data (sterilizers, washers, packaging) |
-| EMAINT_WORK_ORDERS | 28 | Maintenance history with costs and MTTR |
-| TECH_NOTES_UNSTRUCTURED | 50 | Technician logbook entries with tribal knowledge |
-| IGNITION_SCADA_TELEMETRY | 62 | Sensor readings including vibration spike on AST-010 |
-| SEPASOFT_MES_PRODUCTION | 40 | Production data with OEE metrics |
+| RAW.ASSET_MASTER | 20 | Equipment master data (sterilizers, washers, packaging) |
+| RAW.SENSOR_READINGS_GENERATED | 175,200 | SCADA telemetry (Jan-Dec 2024), hourly readings |
+| RAW.FAILURE_EVENTS | 19 | Historical failures across 4 failure modes |
+| FEATURES.VW_ML_TRAINING_FEATURES | 7,300 | Engineered features combining SCADA + CMMS |
+| FEATURES.VW_ML_LABELED_DATASET | 1,261 | Labeled training samples (balanced across failure types) |
 
-## Demo Script
+### Failure Mode Distribution
 
-### Opening: Set the Stage
+| Failure Type | Count | Mapped Component |
+|-------------|-------|-----------------|
+| BEARING_WEAR | 681 | Motor Bearing |
+| BRACKET_LOOSE | 246 | Mounting Bracket |
+| MOTOR_OVERLOAD | 247 | Drive Motor |
+| ELECTRICAL_FAULT | 87 | Control Board |
 
-> "STERIS's maintenance operations at Hendrix were struggling with manual data flows and underutilized CMMS. Let me show you how Snowflake Intelligence transforms this."
+## ML Models
 
-### Demo 1: The Urgent Vibration Alert
+All models are registered in the **Snowflake Model Registry** under the ML schema:
 
-**Scenario**: Production calls - the Novus 600 packaging machine is wobbling again!
+| Model | Type | Algorithm | Purpose |
+|-------|------|-----------|---------|
+| `STERIS_RUL_REGRESSOR` | Regression | XGBoost | Predict days until failure |
+| `STERIS_FAILURE_CLASSIFIER` | Multi-class | XGBoost | Identify failure mode + component |
+| `STERIS_ANOMALY_DETECTOR` | Unsupervised | IsolationForest | Detect abnormal sensor patterns |
 
-```
-User: "The Novus 600 at Hendrix is showing a vibration spike of 4.5mm/s. 
-       What's wrong and how do I fix it?"
-```
+### Key Features (24 total)
 
-**What happens**:
-1. Agent queries Cortex Analyst for current telemetry and work order history
-2. Agent searches Cortex Search for technician notes
-3. Agent synthesizes: "This is a known issue. Do NOT replace the bearings - check the pneumatic actuator bracket and torque to 45 ft-lbs."
-
-### Demo 2: Plant Benchmarking
-
-**Scenario**: Leadership wants to see Hendrix performance vs legacy plants
-
-```
-User: "Compare maintenance costs and MTTR between Hendrix and our legacy plants"
-```
-
-**What happens**:
-- Shows Hendrix has lower costs and better MTTR due to newer equipment
-- Highlights areas where legacy plants need investment
-
-### Demo 3: Proactive Maintenance
-
-**Scenario**: Identify assets at risk
-
-```
-User: "Which assets have health scores below 75 and what should we do about them?"
-```
-
-**What happens**:
-- Lists at-risk assets
-- Provides maintenance recommendations
-- Links to relevant work order history
-
-## Key Stakeholder Talking Points
-
-| Challenge | Demo Solution |
-|-----------|---------------|
-| **Manual Data Flows** | Automated ingestion from eMaint, Ignition, and Sepasoft into Snowflake |
-| **CMMS Misunderstanding** | Shows eMaint as an "Intelligence" layer that reduces MTTR, not just task tracking |
-| **Fragmented Insights** | Combines SCADA telemetry with technician notes for predictive maintenance |
-| **Enterprise Benchmarking** | Cortex Analyst compares Hendrix Lighthouse against legacy plants |
-| **Tribal Knowledge Loss** | Cortex Search captures and surfaces technician expertise |
+- **SCADA Sensors**: vibration, motor temp, motor current (daily avg/max/min/std)
+- **Rolling Statistics**: 7-day and 30-day averages and maximums
+- **Trend Indicators**: vibration/temp/current trend percentages (7d, 30d)
+- **Anomaly Signals**: vibration and temperature z-scores
+- **CMMS History**: cumulative corrective WOs, downtime hours, avg MTTR, days since last corrective
+- **Asset Context**: asset age, days since last maintenance, criticality score
 
 ## File Structure
 
 ```
 steris-emaint-demo/
 ├── README.md                              # This file
-└── sql/                                   # All SQL scripts (just run these!)
-    ├── 00_run_all.sql                    # Setup overview and verification
-    ├── 01_setup_database.sql             # Database & schema creation
-    ├── 02_create_raw_tables.sql          # Tables + INSERT statements (all data)
-    ├── 03_create_curated_views.sql       # Analytical views
-    ├── 04_create_semantic_view.sql       # Semantic View for Cortex Analyst
-    ├── 05_create_cortex_search.sql       # Cortex Search Service
-    ├── 06_create_cortex_agent.sql        # Cortex Agent configuration
-    └── 07_demo_queries.sql               # Demo & verification queries
+├── DEMO_GUIDE.md                          # Step-by-step demo script with talking points
+├── ARCHITECTURE.md                        # Technical architecture details
+├── demo_notebook.ipynb                    # Primary demo notebook (Snowsight)
+├── data/
+│   ├── scada_telemetry_ml.csv             # SCADA sensor training data
+│   ├── work_orders_ml.csv                 # CMMS work order training data
+│   └── failure_labels_ml.csv              # Failure event labels
+├── scripts/
+│   ├── generate_ml_training_data.py       # Generate synthetic training data
+│   ├── train_predictive_models.py         # Standalone model training script
+│   └── snowpark_session.py                # Snowpark session management
+├── sql/
+│   ├── 01_setup_database.sql              # Database & schema creation
+│   ├── 02_create_raw_tables.sql           # Tables + INSERT statements
+│   ├── 03_create_curated_views.sql        # Feature engineering views
+│   └── 20_infrastructure_setup.sql        # Warehouse & role setup
+└── streamlit/
+    └── app.py                             # Streamlit dashboard (optional)
 ```
 
 ## Technical References
 
-### Required Documentation (Used to Build This Demo)
-
 | Resource | URL | Used For |
 |----------|-----|----------|
-| **Semantic View Example** | https://docs.snowflake.com/en/user-guide/views-semantic/example | Creating `MAINTENANCE_SEMANTIC_VW` |
-| **Cortex Agents Management** | https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents-manage | CREATE AGENT SQL syntax |
-| **Agent Best Practices** | https://github.com/Snowflake-Labs/sfquickstarts/blob/master/site/sfguides/src/best-practices-to-building-cortex-agents/best-practices-to-building-cortex-agents.md | Tool orchestration and instructions |
-
-### Additional Documentation
-
-- [Snowflake Semantic Views Overview](https://docs.snowflake.com/en/user-guide/views-semantic/overview)
-- [Cortex Search Service Documentation](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search)
-- [CREATE CORTEX SEARCH SERVICE](https://docs.snowflake.com/en/sql-reference/sql/create-cortex-search)
-- [CREATE SEMANTIC VIEW](https://docs.snowflake.com/en/sql-reference/sql/create-semantic-view)
+| **Snowpark ML Model Registry** | https://docs.snowflake.com/en/developer-guide/snowpark-ml/model-registry/overview | Registering XGBoost models |
+| **Snowflake Notebooks** | https://docs.snowflake.com/en/user-guide/ui-snowsight/notebooks | Running demo_notebook.ipynb |
+| **XGBoost Documentation** | https://xgboost.readthedocs.io/ | Regressor & classifier parameters |
 
 ### Role Requirements
 
-All demo assets are created using the **`SF_INTELLIGENCE_DEMO`** role. Ensure this role has:
-- `CREATE DATABASE` privilege (or use an existing database)
-- `CREATE WAREHOUSE` privilege
-- `CREATE AGENT` privilege on the schema
-- `CREATE CORTEX SEARCH SERVICE` privilege
-
-## Support
-
-For questions about this demo, contact the Snowflake Solutions Engineering team.
+The demo uses the **`SF_INTELLIGENCE_DEMO`** role. Ensure this role has:
+- `USAGE` on database `STERIS_RELIABILITY_DB`
+- `USAGE` on warehouse `STERIS_ANALYTICS_WH`
+- `CREATE TABLE`, `CREATE VIEW` on relevant schemas
+- `CREATE MODEL` on the ML schema
 
 ---
 
-**Built with Snowflake Intelligence** 🏔️
+**Built with Snowflake Snowpark ML**
