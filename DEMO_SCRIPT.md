@@ -5,7 +5,7 @@
 
 ---
 
-## Cell 0 — Intro
+## "Intro"
 
 **SAY:** "Perdita, today I'm going to show you a complete predictive maintenance pipeline — from your raw Ignition SCADA telemetry and eMaint work orders all the way to a prioritized maintenance work queue with RUL predictions, failure mode identification, and component-level diagnostics. The entire thing runs inside Snowflake — no external ML platform, no data movement."
 
@@ -15,13 +15,13 @@
 
 ---
 
-## Cell 1 — USE ROLE
+## "Session Setup"
 
-Just run it. No commentary needed — sets the session context.
+Just run it. No commentary needed — sets the role, database, schema, and warehouse.
 
 ---
 
-## Cells 2-3 — Source Data Intro + Asset Fleet
+## "Source Data Overview" → "Asset Fleet"
 
 **SAY:** "Let's start with the data. In most organizations, SCADA telemetry lives in one system and CMMS work orders live in another. Engineers export CSVs, email spreadsheets, manually reconcile. Here, both streams land in one governed platform."
 
@@ -33,85 +33,85 @@ Just run it. No commentary needed — sets the session context.
 
 ---
 
-## Cells 4-6 — SCADA Telemetry
+## "SCADA Telemetry Intro" → "SCADA Sample" → "SCADA Readings Per Asset"
 
 **SAY:** "Here's the raw SCADA feed — hourly vibration, temperature, and motor current from every asset. 175,000 readings, sitting in Snowflake, ready to query."
 
-**HIGHLIGHT:** Row count (175K) and the three sensor types. Cell 6 shows readings per asset — proves data completeness.
+**HIGHLIGHT:** Row count (175K) and the three sensor types. "SCADA Readings Per Asset" shows readings per asset — proves data completeness.
 
 **AHA MOMENT:** "Notice we're querying this with plain SQL. No special connector, no API call to Ignition. The data landed here via standard ingestion and now it's just a table."
 
 ---
 
-## Cells 7-9 — CMMS Failure History
+## "CMMS Failure History Intro" → "Failure Events" → "Downtime Cost"
 
 **SAY:** "And here's the other half — your eMaint failure records. 19 documented failures across 5 assets with root cause, downtime hours, and repair details."
 
-**HIGHLIGHT:** Run Cell 8 — point to FAILURE_TYPE and COMPONENT_FAILED columns. These become the supervised learning labels.
+**HIGHLIGHT:** Run "Failure Events" — point to FAILURE_TYPE and COMPONENT_FAILED columns. These become the supervised learning labels.
 
 **PERDITA — CMMS Historical Records requirement:** "This is exactly what you described — using historical maintenance records to train the models. The failure type tells the model WHAT failed, the timestamp tells it WHEN, and the repair hours tell it HOW LONG it took. That's your ground truth."
 
-**WOW MOMENT (Cell 9 — downtime cost):** "And here's the business case — we calculate the actual cost of unplanned downtime per asset using the hourly production impact. This is what we'll use later to prioritize the work queue."
+**WOW MOMENT ("Downtime Cost"):** "And here's the business case — we calculate the actual cost of unplanned downtime per asset using the hourly production impact. This is what we'll use later to prioritize the work queue."
 
 ---
 
-## Cells 10-13 — Data Cleansing
+## "Data Cleansing Intro" → "Null Check" → "Outlier Detection" → "Reading Frequency"
 
 **SAY:** "Before we build features, we need to validate the data. Are there missing readings? Outliers? Gaps in coverage? With Snowflake, this is pure SQL against the live data — no exporting to pandas for profiling."
 
-**HIGHLIGHT:** Run Cell 11 (null check) — zero nulls. Run Cell 12 (outlier detection) — explain z-scores: "A z-score above 3 means a reading is more than 3 standard deviations from the mean. These aren't errors — they're degradation signals."
+**HIGHLIGHT:** Run "Null Check" — zero nulls. Run "Outlier Detection" — explain z-scores: "A z-score above 3 means a reading is more than 3 standard deviations from the mean. These aren't errors — they're degradation signals."
 
 **CRITICAL FOR PERDITA:** "This is important — in most setups, data scientists would export this to a Jupyter notebook on their laptop to profile it. Here, the profiling runs where the data lives. No copy, no export, no version mismatch."
 
 ---
 
-## Cells 14-16 — Feature Engineering
+## "Feature Engineering Intro" → "Create Feature View" → "Feature Sample AST-002" → "Feature Row Count"
 
 **SAY:** "This is where raw readings become learnable patterns. We take 175,000 hourly sensor readings and compute 24 engineered features using SQL window functions — rolling averages, trend percentages, z-scores, and CMMS cumulative metrics."
 
-**HIGHLIGHT:** Point to the 4 feature categories in the markdown. When you run Cell 15 (the CREATE VIEW), say: "Watch this — 24 features computed over 175K rows, and it runs in seconds on elastic compute. No Spark cluster to provision."
+**HIGHLIGHT:** Point to the 4 feature categories in the markdown. When you run "Create Feature View", say: "Watch this — 24 features computed over 175K rows, and it runs in seconds on elastic compute. No Spark cluster to provision."
 
-**AHA MOMENT (Cell 16 — the specific example):** "Let me show you a specific asset. AST-002 on October 14th: vibration is 0.78 mm/s daily but the 7-day average is 0.75 — and the trend is UP 5.4%. The z-score is 2.39, meaning it's approaching statistical anomaly. It's had 3 corrective work orders, and it's been 14 days since the last one. THESE are the patterns the model learns from."
+**AHA MOMENT ("Feature Sample AST-002"):** "Let me show you a specific asset. AST-002 on October 14th: vibration is 0.78 mm/s daily but the 7-day average is 0.75 — and the trend is UP 5.4%. The z-score is 2.39, meaning it's approaching statistical anomaly. It's had 3 corrective work orders, and it's been 14 days since the last one. THESE are the patterns the model learns from."
 
 **PERDITA — This is your 'aha' moment:** "This is exactly what your team described — taking SCADA telemetry and CMMS history and turning them into prognostic features. The vibration trend tells you it's getting worse. The z-score tells you how abnormal it is. The CMMS features tell you it has a history. Together, they predict WHEN and WHAT will fail."
 
 ---
 
-## Cell 17 — Feature Row Count
+## "Feature Row Count"
 
 Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cells 18-20 — Feature Summary + Labeled Dataset
+## "Labeled Dataset Intro" → "Create Labeled View" → "Labeled Dataset Sample"
 
 **SAY:** "Each row is now one asset-day with 24 features. And because these are Snowflake views, they auto-refresh as new sensor data arrives. There's no batch ETL to re-run."
 
 **IF SHE ASKS** "Why not use Snowflake's native Feature Store?": "Great question. The Feature Store is ideal for production deployments with versioned feature sets and point-in-time lookups. For this demo, SQL views give us the same auto-refresh behavior with simpler setup. In production, we'd likely migrate these views into the Feature Store for version control and time-travel capabilities."
 
-**SAY (Cell 19-20):** "Now we create our training labels. For every feature-day within 90 days of a known failure, we know exactly what failed and how many days until it happened."
+**SAY ("Create Labeled View" → "Labeled Dataset Sample"):** "Now we create our training labels. For every feature-day within 90 days of a known failure, we know exactly what failed and how many days until it happened."
 
-**HIGHLIGHT (Cell 20):** Point to the DAYS_TO_FAILURE column — "This is the RUL target. The model learns: 'when features look like THIS, failure is X days away.'"
+**HIGHLIGHT ("Labeled Dataset Sample"):** Point to the DAYS_TO_FAILURE column — "This is the RUL target. The model learns: 'when features look like THIS, failure is X days away.'"
 
 **CRITICAL FOR PERDITA:** "Notice the gap assignment logic — when an asset has multiple failures, we assign each feature-day to the NEXT upcoming failure only. This prevents mislabeling between failure events."
 
 ---
 
-## Cells 21-23 — Model Training Intro + Imports + Data Prep
+## "Model Training Intro" → "Python Imports" → "Load Training Data"
 
 **SAY:** "Now for the ML. Two models, both trained right here in this notebook using Snowpark Python. The data never leaves Snowflake."
 
 **PERDITA — Prognostics & RUL requirement:** "The regressor answers 'WHEN will it fail?' — that's your RUL with specific timeframes. The classifier answers 'WHAT will fail and WHY?' — that's your failure identification down to the component."
 
-**WOW MOMENT (Cell 22):** "Notice — I'm importing XGBoost, scikit-learn, and pandas right here in the same notebook where we just wrote SQL. SQL for feature engineering, Python for model training, same session, same governance. That's the Snowflake advantage."
+**WOW MOMENT ("Python Imports"):** "Notice — I'm importing XGBoost, scikit-learn, and pandas right here in the same notebook where we just wrote SQL. SQL for feature engineering, Python for model training, same session, same governance. That's the Snowflake advantage."
 
-**Cell 23 output:** "Training dataset: 2,522 samples — 1,261 failure plus 1,261 healthy, balanced equally."
+**"Load Training Data" output:** "Training dataset: 2,522 samples — 1,261 failure plus 1,261 healthy, balanced equally."
 
 **IF SHE ASKS** about balanced training: "We balance healthy and failure samples equally so the model doesn't just learn to predict 'healthy' for everything — which is what 95% of the data actually is."
 
 ---
 
-## Cells 24-25 — RUL Regression
+## "RUL Regression Intro" → "Train RUL Model"
 
 **SAY:** "First model: RUL regression. We're training XGBoost on 2,500 samples to predict days until failure."
 
@@ -121,7 +121,7 @@ Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cells 26-27 — Failure Mode Classification
+## "Classifier Intro" → "Train Classifier"
 
 **SAY:** "Second model: failure mode classification. Same 24 features, but now predicting WHICH type of failure is approaching — bearing wear, bracket loose, motor overload, or electrical fault. Each maps to a specific component."
 
@@ -135,7 +135,7 @@ Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cells 28-29 — Fleet Scoring
+## "Predictions Intro" → "Score Fleet"
 
 **SAY:** "Now we score the entire fleet. Both models run against every asset's latest sensor features — one Python call, results in seconds."
 
@@ -154,7 +154,7 @@ Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cells 30-31 — Write Predictions to Snowflake
+## "Write Predictions Intro" → "Write to Snowflake"
 
 **SAY:** "Now the predictions land as governed Snowflake tables. Two tables: the predictions themselves, and an evidence table documenting WHY each prediction was made — the SCADA readings and CMMS records behind it."
 
@@ -164,7 +164,7 @@ Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cells 32-33 — High-Risk Assets Drill Down
+## "High-Risk Drill Down Intro" → "High-Risk Assets"
 
 **SAY:** "Now watch this — a maintenance supervisor who knows zero Python can write this SQL query: 'Show me every asset failing within 30 days, sorted by urgency.' That's it. ML outputs are just tables."
 
@@ -172,7 +172,7 @@ Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cells 34-35 — Prediction Evidence
+## "Prediction Evidence Intro" → "Evidence Detail"
 
 **SAY:** "Here's what sets this apart from a black-box ML tool. Every prediction has evidence: the specific vibration reading, the temperature, the CMMS work order history that drove it."
 
@@ -182,7 +182,7 @@ Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cells 36-37 — Maintenance Work Queue (GRAND FINALE)
+## "Work Queue Intro" → "Maintenance Work Queue" (GRAND FINALE)
 
 **SAY:** "And here's the deliverable. A prioritized maintenance work queue — sorted by urgency, with the predicted failure mode, component at risk, confidence level, and the dollar cost of downtime per hour."
 
@@ -194,7 +194,7 @@ Quick validation. "7,300 asset-days of features across the fleet."
 
 ---
 
-## Cell 38 — Summary
+## "Summary"
 
 **SAY:** "Let me tie this back to what you asked for."
 
