@@ -59,7 +59,11 @@ Just run it. No commentary needed — sets the role, database, schema, and wareh
 
 **SAY:** "Before we build features, we need to validate the data. Are there missing readings? Outliers? Gaps in coverage? With Snowflake, this is pure SQL against the live data — no exporting to pandas for profiling."
 
-**HIGHLIGHT:** Run "Null Check" — zero nulls. Run "Outlier Detection" — explain z-scores: "For each asset, we compute the mean and standard deviation of vibration and temperature. A z-score measures how many standard deviations a reading is from that asset's mean. We flag anything above 3 — meaning it's in the extreme 0.3% tail. These aren't data errors — they're degradation signals the model will learn from."
+**HIGHLIGHT:** Run "Null Check" — zero nulls across all three sensor channels (vibration, temperature, current). "Clean ingestion pipeline — no gaps to impute."
+
+Run "Outlier Detection" — point to the MEAN_VIB, STD_VIB, MEAN_TEMP, STD_TEMP columns: "For each asset, we compute the mean and standard deviation. Then we flag any reading more than 3 standard deviations from that asset's mean — a z-score above 3, which is the extreme 0.3% tail."
+
+Point to the zero outlier counts: "Zero outliers here means the ingestion pipeline is clean — no sensor glitches or transmission errors. In production with real sensor drift, this same query catches anomalies automatically. And notice the per-asset stats vary — AST-004 might run hotter than AST-012. That's why we compute z-scores per asset, not fleet-wide."
 
 **CRITICAL FOR PERDITA:** "This is important — in most setups, data scientists would export this to a Jupyter notebook on their laptop to profile it. Here, the profiling runs where the data lives. No copy, no export, no version mismatch."
 
