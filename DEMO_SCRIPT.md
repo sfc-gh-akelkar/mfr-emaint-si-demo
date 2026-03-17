@@ -47,9 +47,9 @@ Just run it. No commentary needed — sets the role, database, schema, and wareh
 
 **SAY:** "And here's the other half — your eMaint failure records. 19 documented failures across 5 assets with root cause, downtime hours, and repair details."
 
-**HIGHLIGHT:** Run "Failure Events" — point to FAILURE_TYPE and COMPONENT_FAILED columns. These become the supervised learning labels.
+**HIGHLIGHT:** Run "Failure Events" — point to FAILURE_TYPE and ROOT_CASE columns. These become the supervised learning labels.
 
-**PERDITA — CMMS Historical Records requirement:** "This is exactly what you described — using historical maintenance records to train the models. The failure type tells the model WHAT failed, the timestamp tells it WHEN, and the repair hours tell it HOW LONG it took. That's your ground truth."
+**PERDITA — CMMS Historical Records requirement:** "This is exactly what you described — using historical maintenance records to train the models. The failure type tells the model WHAT failed, the timestamp tells it WHEN, and the downtime hours tell it HOW LONG it took. That's your ground truth."
 
 **WOW MOMENT ("Downtime Cost"):** "And here's the business case — we calculate the actual cost of unplanned downtime per asset using the hourly production impact. This is what we'll use later to prioritize the work queue."
 
