@@ -51,7 +51,7 @@ Just run it. No commentary needed — sets the role, database, schema, and wareh
 
 **PERDITA — CMMS Historical Records requirement:** "This is exactly what you described — using historical maintenance records to train the models. The failure type tells the model WHAT failed, the timestamp tells it WHEN, and the downtime hours tell it HOW LONG it took. That's your ground truth."
 
-**WOW MOMENT ("Downtime Cost"):** "And here's the business case — we calculate the actual cost of unplanned downtime per asset using the hourly production impact. This is what we'll use later to prioritize the work queue."
+**WOW MOMENT ("Downtime Cost"):** "And here's the business case. We join failure events to the asset master and multiply downtime hours by hourly production impact — that's the REAL cost, not just repair parts. Bearing wear: $227K total across 8 events. Bracket loose: $179K. The repair cost is a rounding error compared to production loss. THAT's why predictive maintenance matters — and that production impact column is what drives the priority in our work queue later."
 
 ---
 
