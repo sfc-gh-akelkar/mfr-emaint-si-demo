@@ -28,8 +28,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from snowpark_session import create_snowpark_session
 
 ROLE = "SF_INTELLIGENCE_DEMO"
-DATABASE = "STERIS_RELIABILITY_DB"
-WAREHOUSE = "STERIS_ANALYTICS_WH"
+DATABASE = "MFR_RELIABILITY_DB"
+WAREHOUSE = "MFR_ANALYTICS_WH"
 
 FEATURE_COLS = [
     "VIBRATION_DAILY_AVG",
@@ -60,7 +60,7 @@ FEATURE_COLS = [
 
 
 def create_session():
-    connection_name = os.getenv("SNOWFLAKE_CONNECTION_NAME") or "akelkar-demo-account"
+    connection_name = os.getenv("SNOWFLAKE_CONNECTION_NAME", "default")
     session = create_snowpark_session(connection_name)
     session.sql(f"USE DATABASE {DATABASE}").collect()
     session.sql(f"USE WAREHOUSE {WAREHOUSE}").collect()
@@ -455,7 +455,7 @@ def register_models(session, rul_model, classifier_model, le, anomaly_model, sca
     print("  Registering RUL Regression model...")
     rul_mv = reg.log_model(
         model=rul_model,
-        model_name="STERIS_RUL_REGRESSOR",
+        model_name="MFR_RUL_REGRESSOR",
         version_name=f"v_{datetime.now().strftime('%Y%m%d_%H%M')}",
         sample_input_data=sample_input,
         comment="XGBoost RUL regression - predicts days to failure from SCADA + CMMS features",
@@ -466,7 +466,7 @@ def register_models(session, rul_model, classifier_model, le, anomaly_model, sca
     print("  Registering Failure Mode Classifier...")
     classifier_mv = reg.log_model(
         model=classifier_model,
-        model_name="STERIS_FAILURE_CLASSIFIER",
+        model_name="MFR_FAILURE_CLASSIFIER",
         version_name=f"v_{datetime.now().strftime('%Y%m%d_%H%M')}",
         sample_input_data=sample_input,
         comment="XGBoost multi-class classifier - identifies failure mode (BEARING_WEAR, MOTOR_OVERLOAD, etc)",
@@ -509,7 +509,7 @@ def register_models(session, rul_model, classifier_model, le, anomaly_model, sca
 
     anomaly_mv = reg.log_model(
         model=pipeline,
-        model_name="STERIS_ANOMALY_DETECTOR",
+        model_name="MFR_ANOMALY_DETECTOR",
         version_name=f"v_{datetime.now().strftime('%Y%m%d_%H%M')}",
         sample_input_data=anomaly_sample,
         comment="IsolationForest anomaly detector - flags abnormal sensor patterns",
@@ -530,7 +530,7 @@ def register_models(session, rul_model, classifier_model, le, anomaly_model, sca
     fi_records = []
     for rank, (_, row) in enumerate(feature_importance.iterrows(), 1):
         fi_records.append({
-            "MODEL_NAME": "STERIS_RUL_REGRESSOR",
+            "MODEL_NAME": "MFR_RUL_REGRESSOR",
             "FEATURE_NAME": row["feature"],
             "IMPORTANCE_SCORE": float(row["importance"]),
             "IMPORTANCE_RANK": rank,
@@ -755,7 +755,7 @@ def run_inference(session, rul_model, classifier_model, le, anomaly_model, scale
     SELECT
         rul.ASSET_ID,
         CURRENT_TIMESTAMP() AS PREDICTION_TIMESTAMP,
-        'STERIS_RUL_REGRESSOR' AS MODEL_ID,
+        'MFR_RUL_REGRESSOR' AS MODEL_ID,
         rul.ANOMALY_SCORE,
         rul.FAILURE_PROBABILITY,
         rul.RUL_DAYS AS PREDICTED_RUL_DAYS,
@@ -859,7 +859,7 @@ def print_demo_results(session):
 
 def main():
     print("=" * 70)
-    print("STERIS PREDICTIVE MAINTENANCE - ML MODEL TRAINING PIPELINE")
+    print("MFR PREDICTIVE MAINTENANCE - ML MODEL TRAINING PIPELINE")
     print(f"Run Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 70)
 

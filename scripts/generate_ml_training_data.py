@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-STERIS Predictive Maintenance ML Demo - Synthetic Data Generator
+MFR Predictive Maintenance ML Demo - Synthetic Data Generator
 
 Generates realistic training data for RUL prediction and failure classification:
 - Extended SCADA telemetry with physics-based degradation patterns
@@ -715,7 +715,7 @@ def generate_csv_labels(labels: list[FailureLabel], filepath: str):
 
 def main():
     print("=" * 70)
-    print("STERIS Predictive Maintenance ML - Synthetic Data Generator")
+    print("MFR Predictive Maintenance ML - Synthetic Data Generator")
     print("=" * 70)
 
     print("\n[1/4] Generating failure events...")
@@ -750,24 +750,24 @@ def main():
     telemetry_sql = generate_sql_insert_telemetry(telemetry)
     with open("sql/10_ml_scada_telemetry.sql", "w") as f:
         f.write("USE ROLE SF_INTELLIGENCE_DEMO;\n")
-        f.write("USE DATABASE STERIS_RELIABILITY_DB;\n")
-        f.write("USE WAREHOUSE STERIS_ANALYTICS_WH;\n\n")
+        f.write("USE DATABASE MFR_RELIABILITY_DB;\n")
+        f.write("USE WAREHOUSE MFR_ANALYTICS_WH;\n\n")
         f.write(telemetry_sql)
     print(f"      Written: sql/10_ml_scada_telemetry.sql")
 
     work_orders_sql = generate_sql_insert_work_orders(work_orders)
     with open("sql/11_ml_work_orders.sql", "w") as f:
         f.write("USE ROLE SF_INTELLIGENCE_DEMO;\n")
-        f.write("USE DATABASE STERIS_RELIABILITY_DB;\n")
-        f.write("USE WAREHOUSE STERIS_ANALYTICS_WH;\n\n")
+        f.write("USE DATABASE MFR_RELIABILITY_DB;\n")
+        f.write("USE WAREHOUSE MFR_ANALYTICS_WH;\n\n")
         f.write(work_orders_sql)
     print(f"      Written: sql/11_ml_work_orders.sql")
 
     labels_sql = generate_sql_insert_labels(labels)
     with open("sql/12_ml_failure_labels.sql", "w") as f:
         f.write("USE ROLE SF_INTELLIGENCE_DEMO;\n")
-        f.write("USE DATABASE STERIS_RELIABILITY_DB;\n")
-        f.write("USE WAREHOUSE STERIS_ANALYTICS_WH;\n\n")
+        f.write("USE DATABASE MFR_RELIABILITY_DB;\n")
+        f.write("USE WAREHOUSE MFR_ANALYTICS_WH;\n\n")
         f.write(labels_sql)
     print(f"      Written: sql/12_ml_failure_labels.sql")
 

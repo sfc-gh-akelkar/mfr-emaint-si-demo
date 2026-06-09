@@ -1,4 +1,4 @@
-# STERIS Predictive Maintenance - Architecture
+# MFR Predictive Maintenance - Architecture
 
 ## Medallion Architecture
 
@@ -57,9 +57,9 @@
 
 | Layer | Component | Implementation | Status |
 |-------|-----------|---------------|--------|
-| **ML** | RUL Regression | `STERIS_RUL_REGRESSOR` (XGBoost, 200 trees) | ✅ In Demo |
-| **ML** | Failure Classification | `STERIS_FAILURE_CLASSIFIER` (XGBoost, 4 classes) | ✅ In Demo |
-| **ML** | Anomaly Detection | `STERIS_ANOMALY_DETECTOR` (IsolationForest) | ✅ In Demo |
+| **ML** | RUL Regression | `MFR_RUL_REGRESSOR` (XGBoost, 200 trees) | ✅ In Demo |
+| **ML** | Failure Classification | `MFR_FAILURE_CLASSIFIER` (XGBoost, 4 classes) | ✅ In Demo |
+| **ML** | Anomaly Detection | `MFR_ANOMALY_DETECTOR` (IsolationForest) | ✅ In Demo |
 | **Features** | Training Features | `VW_ML_TRAINING_FEATURES` (7,300 rows, 24 features) | ✅ In Demo |
 | **Features** | Labeled Dataset | `VW_ML_LABELED_DATASET` (1,261 balanced samples) | ✅ In Demo |
 | **Raw** | SCADA Telemetry | `SENSOR_READINGS_GENERATED` (175,200 hourly readings) | ✅ In Demo |
@@ -110,7 +110,7 @@ Predicts continuous **days to failure** for each asset.
 - **Hyperparameters**: 200 trees, max_depth=6, lr=0.05, subsample=0.8
 - **Input**: 24 SCADA + CMMS features
 - **Output**: Predicted days until next failure
-- **Registered as**: `STERIS_RUL_REGRESSOR`
+- **Registered as**: `MFR_RUL_REGRESSOR`
 
 ### XGBoost Failure Mode Classifier
 
@@ -124,14 +124,14 @@ Identifies **which component will fail** across 4 failure modes.
   - BRACKET_LOOSE -> Mounting Bracket
   - MOTOR_OVERLOAD -> Drive Motor
   - ELECTRICAL_FAULT -> Control Board
-- **Registered as**: `STERIS_FAILURE_CLASSIFIER`
+- **Registered as**: `MFR_FAILURE_CLASSIFIER`
 
 ### Isolation Forest Anomaly Detector
 
 Detects **abnormal sensor patterns** that deviate from normal operation.
 
 - **Algorithm**: IsolationForest (unsupervised)
-- **Registered as**: `STERIS_ANOMALY_DETECTOR`
+- **Registered as**: `MFR_ANOMALY_DETECTOR`
 
 ---
 

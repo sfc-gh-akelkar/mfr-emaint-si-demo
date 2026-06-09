@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets & credentials
+.env
+.env.*
+credentials.json
+*.pem
+*.key
+
+# Model artifacts
+*.pkl
+*.joblib
+models/
+
+# Data (large generated files)
+*.parquet
+
+# Jupyter
+.ipynb_checkpoints/

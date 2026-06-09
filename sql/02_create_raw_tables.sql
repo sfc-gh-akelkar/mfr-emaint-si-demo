@@ -1,5 +1,5 @@
 -- ============================================================================
--- STERIS "Factory of the Future" AI Reliability Platform
+-- MFR "Factory of the Future" AI Reliability Platform
 -- Step 2: Create Raw Data Tables and Insert Data
 -- ============================================================================
 -- This script creates the raw data tables and inserts all demo data directly.
@@ -7,9 +7,9 @@
 -- ============================================================================
 
 USE ROLE SF_INTELLIGENCE_DEMO;
-USE DATABASE STERIS_RELIABILITY_DB;
+USE DATABASE MFR_RELIABILITY_DB;
 USE SCHEMA RAW_DATA;
-USE WAREHOUSE STERIS_ANALYTICS_WH;
+USE WAREHOUSE MFR_ANALYTICS_WH;
 
 -- ============================================================================
 -- Table 1: eMaint Assets - Equipment Master Data
@@ -31,13 +31,13 @@ CREATE OR REPLACE TABLE EMAINT_ASSETS (
     CURRENT_AGE_YEARS NUMBER(5,1),
     ASSET_HEALTH_SCORE NUMBER(5,2)
 )
-COMMENT = 'STERIS equipment master data from eMaint CMMS including sterilizers, washers, and packaging systems';
+COMMENT = 'MFR equipment master data from eMaint CMMS including sterilizers, washers, and packaging systems';
 
 -- Add column comments for semantic context
 COMMENT ON COLUMN EMAINT_ASSETS.ASSET_ID IS 'Unique identifier for each asset in eMaint system';
 COMMENT ON COLUMN EMAINT_ASSETS.ASSET_NAME IS 'Human-readable name of the equipment';
 COMMENT ON COLUMN EMAINT_ASSETS.ASSET_TYPE IS 'Category of equipment: Steam Sterilizer, Washer-Disinfector, Packaging System, Low-Temp Sterilizer, or Utility System';
-COMMENT ON COLUMN EMAINT_ASSETS.MANUFACTURER IS 'Equipment manufacturer - primarily STERIS for core equipment';
+COMMENT ON COLUMN EMAINT_ASSETS.MANUFACTURER IS 'Equipment manufacturer - primarily MFR for core equipment';
 COMMENT ON COLUMN EMAINT_ASSETS.MODEL IS 'Specific model designation (e.g., AMSCO Century V116, Reliance 444, Novus 600)';
 COMMENT ON COLUMN EMAINT_ASSETS.SERIAL_NUMBER IS 'Factory serial number for equipment tracking';
 COMMENT ON COLUMN EMAINT_ASSETS.LOCATION IS 'Physical location within the plant facility';
@@ -52,23 +52,23 @@ COMMENT ON COLUMN EMAINT_ASSETS.ASSET_HEALTH_SCORE IS 'Calculated health score f
 
 -- Insert Assets Data
 INSERT INTO EMAINT_ASSETS (ASSET_ID, ASSET_NAME, ASSET_TYPE, MANUFACTURER, MODEL, SERIAL_NUMBER, LOCATION, PLANT, INSTALLATION_DATE, LAST_MAINTENANCE_DATE, ASSET_STATUS, CRITICALITY, EXPECTED_LIFE_YEARS, CURRENT_AGE_YEARS, ASSET_HEALTH_SCORE) VALUES
-('AST-001', 'AMSCO Sterilizer 01', 'Steam Sterilizer', 'STERIS', 'AMSCO Century V116', 'SN-2019-00145', 'Production Line 1', 'Plant A', '2019-03-15', '2025-11-20', 'Operational', 'Critical', 15, 5.8, 87),
-('AST-002', 'AMSCO Sterilizer 02', 'Steam Sterilizer', 'STERIS', 'AMSCO Century V116', 'SN-2019-00146', 'Production Line 1', 'Plant A', '2019-03-22', '2025-12-01', 'Operational', 'Critical', 15, 5.8, 92),
-('AST-003', 'AMSCO Sterilizer 03', 'Steam Sterilizer', 'STERIS', 'AMSCO Century V120', 'SN-2020-00087', 'Production Line 2', 'Plant A', '2020-06-10', '2025-10-15', 'Operational', 'Critical', 15, 4.6, 89),
-('AST-004', 'Reliance Washer 01', 'Washer-Disinfector', 'STERIS', 'Reliance 444', 'SN-2018-00234', 'Decontamination Area', 'Plant A', '2018-08-20', '2025-11-28', 'Operational', 'High', 12, 6.4, 78),
-('AST-005', 'Reliance Washer 02', 'Washer-Disinfector', 'STERIS', 'Reliance 444', 'SN-2018-00235', 'Decontamination Area', 'Plant A', '2018-08-25', '2025-12-10', 'Operational', 'High', 12, 6.4, 81),
-('AST-006', 'Reliance Washer 03', 'Washer-Disinfector', 'STERIS', 'Reliance 500', 'SN-2021-00098', 'Decontamination Area', 'Plant B', '2021-02-14', '2025-11-05', 'Operational', 'High', 12, 3.9, 94),
-('AST-007', 'AMSCO Sterilizer 04', 'Steam Sterilizer', 'STERIS', 'AMSCO Century V116', 'SN-2017-00067', 'Production Line 1', 'Plant B', '2017-11-03', '2025-10-22', 'Operational', 'Critical', 15, 7.2, 72),
-('AST-008', 'AMSCO Sterilizer 05', 'Steam Sterilizer', 'STERIS', 'AMSCO Century V120', 'SN-2021-00134', 'Production Line 2', 'Plant B', '2021-04-18', '2025-12-05', 'Operational', 'Critical', 15, 3.7, 96),
-('AST-009', 'Novus 600 Packaging 01', 'Packaging System', 'STERIS', 'Novus 600', 'SN-2022-00056', 'Packaging Area', 'Plant B', '2022-01-10', '2025-12-15', 'Operational', 'Critical', 10, 2.9, 71),
-('AST-010', 'Novus 600 Packaging 02', 'Packaging System', 'STERIS', 'Novus 600', 'SN-2023-00012', 'Packaging Area', 'Hendrix', '2023-06-15', '2025-12-20', 'Warning', 'Critical', 10, 1.5, 65),
-('AST-011', 'AMSCO Sterilizer 06', 'Steam Sterilizer', 'STERIS', 'AMSCO Evolution', 'SN-2024-00001', 'Sterile Processing', 'Hendrix', '2024-01-08', '2025-11-30', 'Operational', 'Critical', 15, 0.9, 99),
-('AST-012', 'AMSCO Sterilizer 07', 'Steam Sterilizer', 'STERIS', 'AMSCO Evolution', 'SN-2024-00002', 'Sterile Processing', 'Hendrix', '2024-01-15', '2025-12-01', 'Operational', 'Critical', 15, 0.9, 98),
-('AST-013', 'Reliance Washer 04', 'Washer-Disinfector', 'STERIS', 'Reliance 600', 'SN-2024-00015', 'Central Processing', 'Hendrix', '2024-02-20', '2025-11-25', 'Operational', 'High', 12, 0.8, 99),
-('AST-014', 'Reliance Washer 05', 'Washer-Disinfector', 'STERIS', 'Reliance 600', 'SN-2024-00016', 'Central Processing', 'Hendrix', '2024-02-25', '2025-11-28', 'Operational', 'High', 12, 0.8, 98),
-('AST-015', 'Novus 600 Packaging 03', 'Packaging System', 'STERIS', 'Novus 600', 'SN-2024-00045', 'Packaging Line 1', 'Hendrix', '2024-03-10', '2025-12-28', 'Operational', 'Critical', 10, 0.8, 97),
-('AST-016', 'V-PRO Low Temp 01', 'Low-Temp Sterilizer', 'STERIS', 'V-PRO maX', 'SN-2023-00078', 'Low-Temp Suite', 'Hendrix', '2023-09-01', '2025-11-15', 'Operational', 'Critical', 10, 1.3, 95),
-('AST-017', 'V-PRO Low Temp 02', 'Low-Temp Sterilizer', 'STERIS', 'V-PRO maX', 'SN-2024-00089', 'Low-Temp Suite', 'Hendrix', '2024-04-12', '2025-12-10', 'Operational', 'Critical', 10, 0.7, 99),
+('AST-001', 'AMSCO Sterilizer 01', 'Steam Sterilizer', 'MFR', 'AMSCO Century V116', 'SN-2019-00145', 'Production Line 1', 'Plant A', '2019-03-15', '2025-11-20', 'Operational', 'Critical', 15, 5.8, 87),
+('AST-002', 'AMSCO Sterilizer 02', 'Steam Sterilizer', 'MFR', 'AMSCO Century V116', 'SN-2019-00146', 'Production Line 1', 'Plant A', '2019-03-22', '2025-12-01', 'Operational', 'Critical', 15, 5.8, 92),
+('AST-003', 'AMSCO Sterilizer 03', 'Steam Sterilizer', 'MFR', 'AMSCO Century V120', 'SN-2020-00087', 'Production Line 2', 'Plant A', '2020-06-10', '2025-10-15', 'Operational', 'Critical', 15, 4.6, 89),
+('AST-004', 'Reliance Washer 01', 'Washer-Disinfector', 'MFR', 'Reliance 444', 'SN-2018-00234', 'Decontamination Area', 'Plant A', '2018-08-20', '2025-11-28', 'Operational', 'High', 12, 6.4, 78),
+('AST-005', 'Reliance Washer 02', 'Washer-Disinfector', 'MFR', 'Reliance 444', 'SN-2018-00235', 'Decontamination Area', 'Plant A', '2018-08-25', '2025-12-10', 'Operational', 'High', 12, 6.4, 81),
+('AST-006', 'Reliance Washer 03', 'Washer-Disinfector', 'MFR', 'Reliance 500', 'SN-2021-00098', 'Decontamination Area', 'Plant B', '2021-02-14', '2025-11-05', 'Operational', 'High', 12, 3.9, 94),
+('AST-007', 'AMSCO Sterilizer 04', 'Steam Sterilizer', 'MFR', 'AMSCO Century V116', 'SN-2017-00067', 'Production Line 1', 'Plant B', '2017-11-03', '2025-10-22', 'Operational', 'Critical', 15, 7.2, 72),
+('AST-008', 'AMSCO Sterilizer 05', 'Steam Sterilizer', 'MFR', 'AMSCO Century V120', 'SN-2021-00134', 'Production Line 2', 'Plant B', '2021-04-18', '2025-12-05', 'Operational', 'Critical', 15, 3.7, 96),
+('AST-009', 'Novus 600 Packaging 01', 'Packaging System', 'MFR', 'Novus 600', 'SN-2022-00056', 'Packaging Area', 'Plant B', '2022-01-10', '2025-12-15', 'Operational', 'Critical', 10, 2.9, 71),
+('AST-010', 'Novus 600 Packaging 02', 'Packaging System', 'MFR', 'Novus 600', 'SN-2023-00012', 'Packaging Area', 'Hendrix', '2023-06-15', '2025-12-20', 'Warning', 'Critical', 10, 1.5, 65),
+('AST-011', 'AMSCO Sterilizer 06', 'Steam Sterilizer', 'MFR', 'AMSCO Evolution', 'SN-2024-00001', 'Sterile Processing', 'Hendrix', '2024-01-08', '2025-11-30', 'Operational', 'Critical', 15, 0.9, 99),
+('AST-012', 'AMSCO Sterilizer 07', 'Steam Sterilizer', 'MFR', 'AMSCO Evolution', 'SN-2024-00002', 'Sterile Processing', 'Hendrix', '2024-01-15', '2025-12-01', 'Operational', 'Critical', 15, 0.9, 98),
+('AST-013', 'Reliance Washer 04', 'Washer-Disinfector', 'MFR', 'Reliance 600', 'SN-2024-00015', 'Central Processing', 'Hendrix', '2024-02-20', '2025-11-25', 'Operational', 'High', 12, 0.8, 99),
+('AST-014', 'Reliance Washer 05', 'Washer-Disinfector', 'MFR', 'Reliance 600', 'SN-2024-00016', 'Central Processing', 'Hendrix', '2024-02-25', '2025-11-28', 'Operational', 'High', 12, 0.8, 98),
+('AST-015', 'Novus 600 Packaging 03', 'Packaging System', 'MFR', 'Novus 600', 'SN-2024-00045', 'Packaging Line 1', 'Hendrix', '2024-03-10', '2025-12-28', 'Operational', 'Critical', 10, 0.8, 97),
+('AST-016', 'V-PRO Low Temp 01', 'Low-Temp Sterilizer', 'MFR', 'V-PRO maX', 'SN-2023-00078', 'Low-Temp Suite', 'Hendrix', '2023-09-01', '2025-11-15', 'Operational', 'Critical', 10, 1.3, 95),
+('AST-017', 'V-PRO Low Temp 02', 'Low-Temp Sterilizer', 'MFR', 'V-PRO maX', 'SN-2024-00089', 'Low-Temp Suite', 'Hendrix', '2024-04-12', '2025-12-10', 'Operational', 'Critical', 10, 0.7, 99),
 ('AST-018', 'Compressed Air System', 'Utility System', 'Atlas Copco', 'GA45VSD', 'SN-2019-00456', 'Utility Room', 'Plant A', '2019-05-20', '2025-10-30', 'Operational', 'High', 20, 5.6, 85),
 ('AST-019', 'Boiler System 01', 'Utility System', 'Cleaver-Brooks', 'CB-700', 'SN-2017-00123', 'Boiler Room', 'Plant A', '2017-03-10', '2025-11-01', 'Operational', 'Critical', 25, 7.8, 79),
 ('AST-020', 'Boiler System 02', 'Utility System', 'Cleaver-Brooks', 'CB-900', 'SN-2024-00003', 'Utility Center', 'Hendrix', '2024-01-20', '2025-12-15', 'Operational', 'Critical', 25, 0.9, 99);

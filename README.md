@@ -1,14 +1,14 @@
-# STERIS Predictive Maintenance & RUL Platform
+# MFR Predictive Maintenance & RUL Platform
 
 ## Overview
 
-This demo showcases **Snowflake's native ML capabilities** for STERIS's asset reliability program. Using Snowpark ML, XGBoost, and the Snowflake Model Registry, we build predictive models that tell maintenance teams **when** equipment will fail, **what** component will fail, and **why** — directly from SCADA telemetry and CMMS work order history.
+This demo showcases **Snowflake's native ML capabilities** for MFR's asset reliability program. Using Snowpark ML, XGBoost, and the Snowflake Model Registry, we build predictive models that tell maintenance teams **when** equipment will fail, **what** component will fail, and **why** — directly from SCADA telemetry and CMMS work order history.
 
-**Audience**: Perdita Beck (Product Owner), STERIS IT & Operations Leadership
+**Audience**: Reliability Engineering & IT Operations Leadership
 
 ## Business Context
 
-STERIS is a leader in infection prevention and sterilization. Their Hendrix Lighthouse facility generates rich data from SCADA sensors and eMaint CMMS, but today that data is used reactively. This platform transforms it into **proactive, component-level failure predictions**.
+This demo targets a manufacturing facility that generates rich data from SCADA sensors and eMaint CMMS, but today that data is used reactively. This platform transforms it into **proactive, component-level failure predictions**.
 
 | Challenge | Solution |
 |-----------|----------|
@@ -50,7 +50,7 @@ STERIS is a leader in infection prevention and sterilization. Their Hendrix Ligh
 │                                                                             │
 │  ┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────┐  │
 │  │  XGBoost Regressor   │  │  XGBoost Classifier  │  │  IsolationForest │  │
-│  │  STERIS_RUL_REGRESSOR│  │  STERIS_FAILURE_     │  │  STERIS_ANOMALY_ │  │
+│  │  MFR_RUL_REGRESSOR│  │  MFR_FAILURE_     │  │  MFR_ANOMALY_ │  │
 │  │                      │  │  CLASSIFIER          │  │  DETECTOR        │  │
 │  │  Predicts: RUL in    │  │  Predicts: Failure   │  │  Detects: Sensor │  │
 │  │  days until failure   │  │  mode (BEARING_WEAR, │  │  anomalies from  │  │
@@ -74,9 +74,22 @@ STERIS is a leader in infection prevention and sterilization. Their Hendrix Ligh
 
 ### Prerequisites
 
-1. Snowflake account with Snowpark ML enabled
-2. Role `SF_INTELLIGENCE_DEMO` with appropriate privileges
-3. Warehouse `STERIS_ANALYTICS_WH`
+1. Snowflake account with Snowpark ML enabled (Enterprise edition or higher)
+2. A role with permissions to create databases, schemas, tables, views, and models
+3. A warehouse (X-Small or larger is sufficient for this demo dataset)
+4. Python 3.9+ with dependencies from `requirements.txt`
+
+### Customization
+
+The SQL scripts and Python code reference the following objects — update them to match your environment:
+
+| Object | Default Value | Where Referenced |
+|--------|--------------|------------------|
+| Role | `SF_INTELLIGENCE_DEMO` | All SQL scripts, `train_predictive_models.py` |
+| Warehouse | `MFR_ANALYTICS_WH` | `sql/20_infrastructure_setup.sql` |
+| Database | `MFR_RELIABILITY_DB` | All scripts |
+
+To adapt: find-and-replace these values in the `sql/` and `scripts/` directories with your own role, warehouse, and database names.
 
 ### Setup (Run SQL scripts in order)
 
@@ -128,9 +141,9 @@ All models are registered in the **Snowflake Model Registry** under the ML schem
 
 | Model | Type | Algorithm | Purpose |
 |-------|------|-----------|---------|
-| `STERIS_RUL_REGRESSOR` | Regression | XGBoost | Predict days until failure |
-| `STERIS_FAILURE_CLASSIFIER` | Multi-class | XGBoost | Identify failure mode + component |
-| `STERIS_ANOMALY_DETECTOR` | Unsupervised | IsolationForest | Detect abnormal sensor patterns |
+| `MFR_RUL_REGRESSOR` | Regression | XGBoost | Predict days until failure |
+| `MFR_FAILURE_CLASSIFIER` | Multi-class | XGBoost | Identify failure mode + component |
+| `MFR_ANOMALY_DETECTOR` | Unsupervised | IsolationForest | Detect abnormal sensor patterns |
 
 ### Key Features (24 total)
 
@@ -144,9 +157,8 @@ All models are registered in the **Snowflake Model Registry** under the ML schem
 ## File Structure
 
 ```
-steris-emaint-demo/
+mfr-emaint-demo/
 ├── README.md                              # This file
-├── DEMO_GUIDE.md                          # Step-by-step demo script with talking points
 ├── ARCHITECTURE.md                        # Technical architecture details
 ├── demo_notebook.ipynb                    # Primary demo notebook (Snowsight)
 ├── data/
@@ -176,12 +188,12 @@ steris-emaint-demo/
 
 ### Role Requirements
 
-The demo uses the **`SF_INTELLIGENCE_DEMO`** role. Ensure this role has:
-- `USAGE` on database `STERIS_RELIABILITY_DB`
-- `USAGE` on warehouse `STERIS_ANALYTICS_WH`
+The role you use must have:
+- `USAGE` on the database and warehouse
 - `CREATE TABLE`, `CREATE VIEW` on relevant schemas
 - `CREATE MODEL` on the ML schema
+- `USAGE` on the `SNOWFLAKE.ML` application package (for Model Registry)
 
 ---
 
-**Built with Snowflake Snowpark ML**
+**Built with Snowflake Snowpark ML** | Licensed under Apache 2.0

@@ -1,0 +1,9 @@
+snowflake-snowpark-python>=1.11.0
+snowflake-ml-python>=1.5.0
+snowflake-connector-python>=3.6.0
+xgboost>=2.0.0
+scikit-learn>=1.3.0
+pandas>=2.0.0
+numpy>=1.24.0
+plotly>=5.18.0
+streamlit>=1.30.0

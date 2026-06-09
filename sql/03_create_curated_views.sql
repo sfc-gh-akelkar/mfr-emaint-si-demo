@@ -1,5 +1,5 @@
 -- ============================================================================
--- STERIS "Factory of the Future" AI Reliability Platform
+-- MFR "Factory of the Future" AI Reliability Platform
 -- Step 3: Create Curated Data Views
 -- ============================================================================
 -- This script creates joined views that combine data from multiple sources
@@ -7,9 +7,9 @@
 -- ============================================================================
 
 USE ROLE SF_INTELLIGENCE_DEMO;
-USE DATABASE STERIS_RELIABILITY_DB;
+USE DATABASE MFR_RELIABILITY_DB;
 USE SCHEMA CURATED_DATA;
-USE WAREHOUSE STERIS_ANALYTICS_WH;
+USE WAREHOUSE MFR_ANALYTICS_WH;
 
 -- ============================================================================
 -- View 1: Maintenance Analytics View
@@ -159,7 +159,7 @@ GROUP BY a.PLANT
 ORDER BY a.PLANT;
 
 COMMENT ON VIEW PLANT_COMPARISON_VW IS 
-'Plant-level aggregation for benchmarking Hendrix Lighthouse against legacy Plant A and Plant B facilities.';
+'Plant-level aggregation for benchmarking primary manufacturing facility against legacy Plant A and Plant B facilities.';
 
 -- ============================================================================
 -- View 4: Current Asset Telemetry Status

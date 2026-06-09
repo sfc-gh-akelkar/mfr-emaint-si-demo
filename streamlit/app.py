@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 import os
 
 st.set_page_config(
-    page_title="STERIS Predictive Maintenance",
+    page_title="MFR Predictive Maintenance",
     page_icon="🏭",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -26,45 +26,47 @@ def run_query(query):
 
 def get_fleet_summary():
     return run_query("""
-        SELECT * FROM STERIS_RELIABILITY_DB.ANALYTICS.VW_FLEET_SUMMARY
+        SELECT * FROM MFR_RELIABILITY_DB.ANALYTICS.VW_FLEET_SUMMARY
     """)
 
 def get_asset_health():
     return run_query("""
-        SELECT * FROM STERIS_RELIABILITY_DB.ANALYTICS.VW_ASSET_HEALTH_DASHBOARD
+        SELECT * FROM MFR_RELIABILITY_DB.ANALYTICS.VW_ASSET_HEALTH_DASHBOARD
         ORDER BY RISK_SCORE DESC
     """)
 
 def get_high_risk_assets():
     return run_query("""
-        SELECT * FROM STERIS_RELIABILITY_DB.ANALYTICS.VW_HIGH_RISK_ASSETS
+        SELECT * FROM MFR_RELIABILITY_DB.ANALYTICS.VW_HIGH_RISK_ASSETS
         ORDER BY RISK_SCORE DESC
     """)
 
 def get_maintenance_kpis():
     return run_query("""
-        SELECT * FROM STERIS_RELIABILITY_DB.ANALYTICS.VW_MAINTENANCE_KPIS
+        SELECT * FROM MFR_RELIABILITY_DB.ANALYTICS.VW_MAINTENANCE_KPIS
     """)
 
 def get_cost_avoidance():
     return run_query("""
-        SELECT * FROM STERIS_RELIABILITY_DB.ANALYTICS.VW_COST_AVOIDANCE_TRACKING
+        SELECT * FROM MFR_RELIABILITY_DB.ANALYTICS.VW_COST_AVOIDANCE_TRACKING
     """)
 
 def get_sensor_trends(asset_id):
-    return run_query(f"""
+    conn = get_connection()
+    query = """
         SELECT 
             FEATURE_DATE,
             VIBRATION_DAILY_AVG,
             MOTOR_CURRENT_DAILY_AVG,
             MOTOR_TEMP_DAILY_AVG,
             ANOMALY_HOURS
-        FROM STERIS_RELIABILITY_DB.FEATURES.VW_ASSET_FEATURES_DAILY
-        WHERE ASSET_ID = '{asset_id}'
+        FROM MFR_RELIABILITY_DB.FEATURES.VW_ASSET_FEATURES_DAILY
+        WHERE ASSET_ID = %(asset_id)s
         ORDER BY FEATURE_DATE
-    """)
+    """
+    return pd.read_sql(query, conn, params={"asset_id": asset_id})
 
-st.title("🏭 STERIS Factory of the Future")
+st.title("🏭 MFR Factory of the Future")
 st.markdown("### Predictive Maintenance Dashboard")
 
 page = st.sidebar.radio(
@@ -392,7 +394,7 @@ elif page == "🔧 Maintenance KPIs":
 st.sidebar.divider()
 st.sidebar.markdown("### About")
 st.sidebar.markdown("""
-**STERIS Factory of the Future**  
+**MFR Factory of the Future**  
 Predictive Maintenance AI System
 
 Built with:
@@ -406,7 +408,7 @@ Built with:
 if st.sidebar.button("🔄 Refresh Scores"):
     try:
         conn = get_connection()
-        conn.cursor().execute("CALL STERIS_RELIABILITY_DB.ML.SCORE_ASSETS_SQL()")
+        conn.cursor().execute("CALL MFR_RELIABILITY_DB.ML.SCORE_ASSETS_SQL()")
         st.cache_data.clear()
         st.success("Scores refreshed!")
         st.rerun()

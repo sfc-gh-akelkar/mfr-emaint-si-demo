@@ -1,25 +1,25 @@
 /*******************************************************************************
- * STERIS FACTORY OF THE FUTURE - PREDICTIVE MAINTENANCE
+ * MFR FACTORY OF THE FUTURE - PREDICTIVE MAINTENANCE
  * Infrastructure Setup Script
  * 
  * Purpose: Create medallion architecture (5 schemas) for ML pipeline
- * Database: STERIS_RELIABILITY_DB
+ * Database: MFR_RELIABILITY_DB
  * 
  * Adapted from Snowflake's AI-Powered Predictive Grid Maintenance demo
  * for medical device manufacturing context
  ******************************************************************************/
 
 USE ROLE SF_INTELLIGENCE_DEMO;
-USE WAREHOUSE STERIS_ANALYTICS_WH;
+USE WAREHOUSE MFR_ANALYTICS_WH;
 
 -- =============================================================================
 -- SECTION 1: DATABASE SETUP
 -- =============================================================================
 
-CREATE DATABASE IF NOT EXISTS STERIS_RELIABILITY_DB
-    COMMENT = 'STERIS Factory of the Future - Predictive Maintenance AI System';
+CREATE DATABASE IF NOT EXISTS MFR_RELIABILITY_DB
+    COMMENT = 'MFR Factory of the Future - Predictive Maintenance AI System';
 
-USE DATABASE STERIS_RELIABILITY_DB;
+USE DATABASE MFR_RELIABILITY_DB;
 
 -- =============================================================================
 -- SECTION 2: MEDALLION ARCHITECTURE SCHEMAS
@@ -343,5 +343,5 @@ $$;
 -- =============================================================================
 
 SELECT 'Infrastructure setup complete!' as STATUS;
-SELECT 'Database: STERIS_RELIABILITY_DB' as DATABASE_NAME;
+SELECT 'Database: MFR_RELIABILITY_DB' as DATABASE_NAME;
 SELECT 'Schemas: RAW, FEATURES, ML, ANALYTICS, UNSTRUCTURED, STAGING' as SCHEMAS;
